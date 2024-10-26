@@ -1,0 +1,4 @@
+{
+  "*.less": ["stylelint"],
+  "*.{ts,js}": ["eslint --fix"]
+}

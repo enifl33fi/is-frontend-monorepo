@@ -1,0 +1,38 @@
+{
+  "extends": ["../../.eslintrc.json"],
+  "ignorePatterns": ["!**/*"],
+  "overrides": [
+    {
+      "extends": ["plugin:@nx/angular"],
+      "files": ["*.ts"],
+      "rules": {
+        "@angular-eslint/component-selector": [
+          "error",
+          {
+            "prefix": "is",
+            "style": "kebab-case",
+            "type": "element"
+          }
+        ],
+        "@angular-eslint/directive-selector": [
+          "error",
+          {
+            "prefix": "is",
+            "style": "camelCase",
+            "type": "attribute"
+          }
+        ]
+      }
+    },
+    {
+      "extends": ["plugin:@nx/angular-template"],
+      "files": ["*.html"],
+      "rules": {}
+    },
+    {
+      "extends": ["plugin:playwright/recommended"],
+      "files": ["e2e/**/*.{ts,js,tsx,jsx}"],
+      "rules": {}
+    }
+  ]
+}

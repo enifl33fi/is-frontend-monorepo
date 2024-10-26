@@ -1,0 +1,29 @@
+{
+  "ignorePatterns": ["**/*"],
+  "overrides": [
+    {
+      "extends": [
+        "plugin:@taiga-ui/experience/all",
+        "plugin:@nx/typescript",
+        "plugin:@nx/angular",
+        "plugin:@ngrx/all",
+        "./extra-eslint-config/nx.js"
+      ],
+      "files": ["*.ts"],
+      "parserOptions": {
+        "project": ["tsconfig.*?.json"]
+      },
+      "rules": {}
+    },
+    {
+      "extends": ["plugin:@nx/angular-template"],
+      "files": ["*.html"]
+    },
+    {
+      "extends": ["plugin:@nx/javascript"],
+      "files": ["*.js"]
+    }
+  ],
+  "plugins": ["@nx"],
+  "root": true
+}
