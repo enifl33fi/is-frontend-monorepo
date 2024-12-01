@@ -4,7 +4,7 @@ export function notBlankValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     return control.value?.trim()?.length === 0
       ? {
-          noBlank: true,
+          notBlank: true,
         }
       : null;
   };

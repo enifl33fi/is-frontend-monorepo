@@ -5,6 +5,7 @@
   <form
     class="tui-form"
     [formGroup]="form"
+    (ngSubmit)="onSubmit()"
   >
     <div class="tui-form__header">Sign In</div>
     <tui-textfield
@@ -47,6 +48,7 @@
         size="m"
         tuiButton
         class="tui-form__button"
+        [disabled]="!form.valid"
       >
         Sign In
       </button>

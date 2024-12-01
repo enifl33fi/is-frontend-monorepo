@@ -5,6 +5,8 @@ import type {UserState} from './user.state';
 
 export const initialUserState = {
   rawUsername: '',
+  user: null,
+  tokens: null,
 };
 
 export const userStore = createFeature({
@@ -16,6 +18,14 @@ export const userStore = createFeature({
       (state, {username}): UserState => ({
         ...state,
         rawUsername: username,
+      }),
+    ),
+    on(
+      lab1UserActions.authResponseFetched,
+      (state, {response}): UserState => ({
+        ...state,
+        user: response.user,
+        tokens: response.tokens,
       }),
     ),
   ),

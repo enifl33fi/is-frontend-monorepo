@@ -5,5 +5,6 @@ export const lab1RouterActions = createActionGroup({
   events: {
     navigateToSignUp: emptyProps(),
     navigateToSignIn: emptyProps(),
+    navigateToHome: emptyProps(),
   },
 });

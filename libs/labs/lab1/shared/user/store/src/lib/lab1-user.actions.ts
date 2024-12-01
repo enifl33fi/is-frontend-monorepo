@@ -1,4 +1,7 @@
-import {createActionGroup, props} from '@ngrx/store';
+import type {ErrorResponse} from '@is/labs/lab1/shared/types';
+import type {UserRegisterRequestDto, UserRequestDto} from '@is/labs/lab1/shared/user/dto';
+import type {AuthResponse} from '@is/labs/lab1/shared/user/types';
+import {createActionGroup, emptyProps, props} from '@ngrx/store';
 
 export const userFeatureKey = 'user';
 
@@ -8,5 +11,10 @@ export const lab1UserActions = createActionGroup({
     rawUsernameFetched: props<{
       username: string;
     }>(),
+    register: props<{user: UserRegisterRequestDto}>(),
+    login: props<{user: UserRequestDto}>(),
+    authResponseFetched: props<{response: AuthResponse}>(),
+    adminRequestSentSuccessfully: emptyProps(),
+    requestFailed: props<{error: ErrorResponse}>(),
   },
 });

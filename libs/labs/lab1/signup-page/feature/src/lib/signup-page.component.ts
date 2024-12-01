@@ -2,7 +2,9 @@ import {AsyncPipe} from '@angular/common';
 import {ChangeDetectionStrategy, Component, effect, inject} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {selectRawUsername} from '@is/labs/lab1/shared/user/store';
+import {Role} from '@is/labs/lab1/shared/user/types';
 import {usernameValidator} from '@is/labs/lab1/shared/user/utils';
+import {lab1SignupPageActions} from '@is/labs/lab1/signup-page/store';
 import {notBlankValidator} from '@is/shared/utils';
 import {Store} from '@ngrx/store';
 import {
@@ -61,5 +63,20 @@ export class SignupPageComponent {
         this.form.updateValueAndValidity();
       }
     });
+  }
+
+  public onSubmit() {
+    if (this.form.valid) {
+      const {username, password, isAdmin} = this.form.value;
+      const role: Role = isAdmin ? 'ADMIN' : 'USER';
+
+      if (username && password) {
+        this.store.dispatch(
+          lab1SignupPageActions.formSubmitted({
+            user: {username, password, role},
+          }),
+        );
+      }
+    }
   }
 }
