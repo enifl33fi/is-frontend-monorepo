@@ -1,0 +1,67 @@
+<div
+  tuiAppearance="floating"
+  tuiCardLarge
+>
+  <form
+    class="tui-form"
+    [formGroup]="form"
+  >
+    <div class="tui-form__header">Sign Up</div>
+    <tui-textfield
+      iconStart="@tui.user"
+      class="tui-form__row"
+    >
+      <label tuiLabel>Username</label>
+      <input
+        formControlName="username"
+        tuiTextfield
+      />
+    </tui-textfield>
+    <tui-error
+      formControlName="username"
+      [error]="[] | tuiFieldError | async"
+    />
+
+    <tui-textfield
+      iconStart="@tui.lock"
+      class="tui-form__row"
+    >
+      <label tuiLabel>Password</label>
+      <input
+        formControlName="password"
+        tuiTextfield
+        type="password"
+      />
+      <tui-icon tuiPassword />
+    </tui-textfield>
+
+    <tui-error
+      formControlName="password"
+      [error]="[] | tuiFieldError | async"
+    />
+
+    <div class="tui-form__row">
+      <label tuiLabel>
+        <input
+          formControlName="isAdmin"
+          size="m"
+          tuiSwitch
+          type="checkbox"
+          [showIcons]="true"
+        />
+        Make me admin
+      </label>
+    </div>
+
+    <div class="tui-form__buttons button-wrapper">
+      <button
+        appearance="primary"
+        size="m"
+        tuiButton
+        class="tui-form__button"
+      >
+        Sign Up
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,31 @@
+<div
+  tuiAppearance="floating"
+  tuiCardLarge
+>
+  <form
+    class="tui-form"
+    [formGroup]="form"
+    (ngSubmit)="handleSignUpClick()"
+  >
+    <div class="tui-form__header">Your journey starts here</div>
+    <tui-textfield iconStart="@tui.user">
+      <label tuiLabel>Username</label>
+      <input
+        formControlName="username"
+        tuiTextfield
+        class="tui-form__row"
+      />
+    </tui-textfield>
+
+    <div class="tui-form__buttons button-wrapper">
+      <button
+        appearance="primary"
+        size="m"
+        tuiButton
+        class="tui-form__button"
+      >
+        Sign Up
+      </button>
+    </div>
+  </form>
+</div>

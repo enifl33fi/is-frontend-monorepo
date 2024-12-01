@@ -1,0 +1,13 @@
+{
+  "name": "labs-lab1-welcome-page-store",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/labs/lab1/welcome-page/store/src",
+  "prefix": "lab1",
+  "projectType": "library",
+  "tags": ["domain:labs/lab1/welcome-page", "type:store"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

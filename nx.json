@@ -16,6 +16,7 @@
     "sharedGlobals": ["{workspaceRoot}/.github/workflows/ci.yml"]
   },
   "nxCloudId": "671d085bac161c6f6b46ba73",
+  "npmScope": "is",
   "targetDefaults": {
     "@angular-devkit/build-angular:browser": {
       "cache": true,
@@ -64,10 +65,22 @@
   ],
   "generators": {
     "@nx/angular:application": {
-      "e2eTestRunner": "playwright",
+      "e2eTestRunner": "none",
       "linter": "eslint",
       "style": "less",
       "unitTestRunner": "jest"
+    },
+    "@nx/angular:library": {
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "skipPackageJson": true,
+      "prefix": "is"
+    },
+    "@nx/angular:component": {
+      "style": "less",
+      "changeDetection": "OnPush",
+      "displayBlock": true,
+      "standalone": true
     }
   }
 }

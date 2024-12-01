@@ -1,0 +1,13 @@
+{
+  "name": "labs-lab1-signin-page-feature",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/labs/lab1/signin-page/feature/src",
+  "prefix": "lab1",
+  "projectType": "library",
+  "tags": ["domain:labs/lab1/signin-page", "type:feature"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

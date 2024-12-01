@@ -1,3 +1,6 @@
 {
-  "extends": ["@taiga-ui/stylelint-config/taiga"]
+  "extends": ["@taiga-ui/stylelint-config"],
+  "rules": {
+    "csstools/use-logical": null
+  }
 }

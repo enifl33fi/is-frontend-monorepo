@@ -13,7 +13,9 @@
       "parserOptions": {
         "project": ["tsconfig.*?.json"]
       },
-      "rules": {}
+      "rules": {
+        "arrow-body-style": "off"
+      }
     },
     {
       "extends": ["plugin:@nx/angular-template"],

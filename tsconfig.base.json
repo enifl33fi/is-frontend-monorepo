@@ -15,7 +15,22 @@
     "skipDefaultLibCheck": true,
     "strictNullChecks": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@is/labs/lab1/shared/header/feature": ["libs/labs/lab1/shared/header/feature/src/index.ts"],
+      "@is/labs/lab1/shared/router/effects": ["libs/labs/lab1/shared/router/effects/src/index.ts"],
+      "@is/labs/lab1/shared/router/store": ["libs/labs/lab1/shared/router/store/src/index.ts"],
+      "@is/labs/lab1/shared/user/effects": ["libs/labs/lab1/shared/user/effects/src/index.ts"],
+      "@is/labs/lab1/shared/user/store": ["libs/labs/lab1/shared/user/store/src/index.ts"],
+      "@is/labs/lab1/shared/user/utils": ["libs/labs/lab1/shared/user/utils/src/index.ts"],
+      "@is/labs/lab1/shared/utils": ["libs/labs/lab1/shared/utils/src/index.ts"],
+      "@is/labs/lab1/shell": ["libs/labs/lab1/shell/src/index.ts"],
+      "@is/labs/lab1/signin-page/feature": ["libs/labs/lab1/signin-page/feature/src/index.ts"],
+      "@is/labs/lab1/signup-page/feature": ["libs/labs/lab1/signup-page/feature/src/index.ts"],
+      "@is/labs/lab1/welcome-page/effects": ["libs/labs/lab1/welcome-page/effects/src/index.ts"],
+      "@is/labs/lab1/welcome-page/feature": ["libs/labs/lab1/welcome-page/feature/src/index.ts"],
+      "@is/labs/lab1/welcome-page/store": ["libs/labs/lab1/welcome-page/store/src/index.ts"],
+      "@is/shared/utils": ["libs/shared/utils/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
