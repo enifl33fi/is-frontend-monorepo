@@ -49,6 +49,7 @@
         tuiButton
         class="tui-form__button"
         [disabled]="!form.valid"
+        [loading]="loadingSignal()"
       >
         Sign In
       </button>

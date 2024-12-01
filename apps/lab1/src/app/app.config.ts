@@ -4,6 +4,7 @@ import {importProvidersFrom, provideZoneChangeDetection} from '@angular/core';
 import {provideAnimations} from '@angular/platform-browser/animations';
 import {provideRouter} from '@angular/router';
 import {rootEffectsProvider} from '@is/labs/lab1/root/effects';
+import {rootStoreProvider} from '@is/labs/lab1/root/store';
 import {routerEffectsProvider} from '@is/labs/lab1/shared/router/effects';
 import {userEffectsProvider} from '@is/labs/lab1/shared/user/effects';
 import {userStoreProvider} from '@is/labs/lab1/shared/user/store';
@@ -30,6 +31,7 @@ export const appConfig: ApplicationConfig = {
     provideTaigaErrorKeys(),
     NG_EVENT_PLUGINS,
     rootEffectsProvider,
+    rootStoreProvider,
     routerEffectsProvider,
     signinPageEffectsProvider,
     signupPageEffectsProvider,

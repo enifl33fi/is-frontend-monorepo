@@ -108,3 +108,17 @@ export const handleAdminResponse$ = createEffect(
   },
   {functional: true},
 );
+
+export const enableLoading$ = createEffect(
+  (actions$ = inject(Actions)) => {
+    return actions$.pipe(
+      ofType(
+        lab1UserActions.adminRequestSentSuccessfully,
+        lab1UserActions.requestFailed,
+        lab1UserActions.authResponseFetched,
+      ),
+      map(() => lab1RootActions.setLoading({loading: false})),
+    );
+  },
+  {functional: true},
+);

@@ -1,6 +1,7 @@
 import {AsyncPipe} from '@angular/common';
 import {ChangeDetectionStrategy, Component, effect, inject} from '@angular/core';
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {selectLoading} from '@is/labs/lab1/root/store';
 import {selectRawUsername} from '@is/labs/lab1/shared/user/store';
 import {usernameValidator} from '@is/labs/lab1/shared/user/utils';
 import {lab1SigninPageActions} from '@is/labs/lab1/signin-page/store';
@@ -15,7 +16,7 @@ import {
   TuiTextfieldComponent,
   TuiTextfieldDirective,
 } from '@taiga-ui/core';
-import {TuiFieldErrorPipe, TuiPassword, TuiSwitch} from '@taiga-ui/kit';
+import {TuiButtonLoading, TuiFieldErrorPipe, TuiPassword, TuiSwitch} from '@taiga-ui/kit';
 import {TuiCardLarge} from '@taiga-ui/layout';
 
 @Component({
@@ -27,6 +28,7 @@ import {TuiCardLarge} from '@taiga-ui/layout';
     ReactiveFormsModule,
     TuiAppearance,
     TuiButton,
+    TuiButtonLoading,
     TuiCardLarge,
     TuiError,
     TuiFieldErrorPipe,
@@ -46,6 +48,7 @@ export class SigninPageComponent {
   private readonly store = inject(Store);
 
   private readonly rawUsernameSignal = this.store.selectSignal(selectRawUsername);
+  public readonly loadingSignal = this.store.selectSignal(selectLoading);
 
   public readonly form = this.fb.group({
     username: this.fb.control('', [Validators.required, usernameValidator()]),
