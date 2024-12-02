@@ -1,7 +1,7 @@
 import {AsyncPipe} from '@angular/common';
 import {ChangeDetectionStrategy, Component, effect, inject} from '@angular/core';
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {selectLoading} from '@is/labs/lab1/root/store';
+import {selectLoading} from '@is/labs/lab1/shared/root/store';
 import {selectRawUsername} from '@is/labs/lab1/shared/user/store';
 import {usernameValidator} from '@is/labs/lab1/shared/user/utils';
 import {lab1SigninPageActions} from '@is/labs/lab1/signin-page/store';

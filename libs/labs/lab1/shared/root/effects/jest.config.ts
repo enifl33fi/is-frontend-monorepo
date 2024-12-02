@@ -1,8 +1,8 @@
 export default {
-  displayName: 'labs-lab1-root-effects',
-  preset: '../../../../../jest.preset.js',
+  displayName: 'labs-lab1-shared-root-effects',
+  preset: '../../../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../../coverage/libs/labs/lab1/root/effects',
+  coverageDirectory: '../../../../../../coverage/libs/labs/lab1/shared/root/effects',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

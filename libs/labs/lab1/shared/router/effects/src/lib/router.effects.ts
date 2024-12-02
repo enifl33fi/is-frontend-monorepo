@@ -27,3 +27,15 @@ export const navigateToSignIn$ = createEffect(
   },
   {functional: true, dispatch: false},
 );
+
+export const navigateToWelcome$ = createEffect(
+  (actions$ = inject(Actions), router = inject(Router)) => {
+    return actions$.pipe(
+      ofType(lab1RouterActions.navigateToWelcome),
+      tap(() => {
+        void router.navigate(['lab1']);
+      }),
+    );
+  },
+  {functional: true, dispatch: false},
+);

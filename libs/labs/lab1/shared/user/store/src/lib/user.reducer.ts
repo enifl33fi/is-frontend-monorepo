@@ -22,10 +22,19 @@ export const userStore = createFeature({
     ),
     on(
       lab1UserActions.authResponseFetched,
+      lab1UserActions.authResponseSavedFetched,
       (state, {response}): UserState => ({
         ...state,
         user: response.user,
         tokens: response.tokens,
+      }),
+    ),
+    on(
+      lab1UserActions.logout,
+      (state): UserState => ({
+        ...state,
+        user: null,
+        tokens: null,
       }),
     ),
   ),

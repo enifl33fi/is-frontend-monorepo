@@ -5,7 +5,7 @@ import {
   UserRequestDto,
   UserResponseDto,
 } from '@is/labs/lab1/shared/user/dto';
-import {AuthResponse, Tokens} from '@is/labs/lab1/shared/user/types';
+import {AuthResponse, Tokens, User} from '@is/labs/lab1/shared/user/types';
 import {BACK_URL_TOKEN, LOCAL_STORAGE_TOKEN} from '@is/shared/utils';
 import {map, Observable} from 'rxjs';
 
@@ -18,6 +18,7 @@ export class UserService {
   private readonly localStorage = inject(LOCAL_STORAGE_TOKEN);
   private readonly accessTokenKey: string = 'access_token';
   private readonly refreshTokenKey: string = 'refresh_token';
+  private readonly userKey: string = 'user';
 
   public registerUser(user: UserRegisterRequestDto): Observable<AuthResponse> {
     return this.http
@@ -43,13 +44,49 @@ export class UserService {
     return this.localStorage.getItem(this.refreshTokenKey);
   }
 
+  public getTokens(): Tokens | null {
+    const accessToken = this.getAccessToken();
+    const refreshToken = this.getRefreshToken();
+
+    if (!accessToken || !refreshToken) {
+      return null;
+    }
+
+    return {
+      access: accessToken,
+      refresh: refreshToken,
+    };
+  }
+
+  public getUser(): User | null {
+    try {
+      const data = this.localStorage.getItem(this.userKey);
+
+      if (data) {
+        return JSON.parse(data) as User;
+      }
+
+      return null;
+    } catch {
+      return null;
+    }
+  }
+
   public storeTokens(tokens: Tokens): void {
     this.localStorage.setItem(this.accessTokenKey, tokens.access);
     this.localStorage.setItem(this.refreshTokenKey, tokens.refresh);
   }
 
+  public storeUser(user: User) {
+    this.localStorage.setItem(this.userKey, JSON.stringify(user));
+  }
+
   public removeTokens(): void {
     this.localStorage.removeItem(this.accessTokenKey);
     this.localStorage.removeItem(this.refreshTokenKey);
+  }
+
+  public removeUser() {
+    this.localStorage.removeItem(this.userKey);
   }
 }

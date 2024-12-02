@@ -1,5 +1,5 @@
 import {inject} from '@angular/core';
-import {lab1RootActions} from '@is/labs/lab1/root/store';
+import {lab1RootActions} from '@is/labs/lab1/shared/root/store';
 import {lab1UserActions} from '@is/labs/lab1/shared/user/store';
 import {lab1SignupPageActions} from '@is/labs/lab1/signup-page/store';
 import {Actions, createEffect, ofType} from '@ngrx/effects';

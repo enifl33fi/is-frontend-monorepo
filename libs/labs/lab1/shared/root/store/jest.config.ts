@@ -1,8 +1,8 @@
 export default {
-  displayName: 'labs-lab1-root-store',
-  preset: '../../../../../jest.preset.js',
+  displayName: 'labs-lab1-shared-root-store',
+  preset: '../../../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../../coverage/libs/labs/lab1/root/store',
+  coverageDirectory: '../../../../../../coverage/libs/labs/lab1/shared/root/store',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

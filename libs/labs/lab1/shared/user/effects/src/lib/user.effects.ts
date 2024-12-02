@@ -1,9 +1,11 @@
+import type {HttpErrorResponse} from '@angular/common/http';
 import {inject} from '@angular/core';
-import {lab1RootActions} from '@is/labs/lab1/root/store';
+import {lab1RootActions} from '@is/labs/lab1/shared/root/store';
 import {lab1RouterActions} from '@is/labs/lab1/shared/router/store';
 import type {ErrorResponse} from '@is/labs/lab1/shared/types';
 import {UserService} from '@is/labs/lab1/shared/user/data-access';
 import {lab1UserActions} from '@is/labs/lab1/shared/user/store';
+import type {AuthResponse} from '@is/labs/lab1/shared/user/types';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {catchError, filter, map, of, switchMap, tap} from 'rxjs';
 
@@ -16,7 +18,11 @@ export const registerUser$ = createEffect(
         return userService.registerUser(user).pipe(
           map((response) => lab1UserActions.authResponseFetched({response})),
           catchError((error: unknown) =>
-            of(lab1UserActions.requestFailed({error: error as ErrorResponse})),
+            of(
+              lab1UserActions.requestFailed({
+                error: error as HttpErrorResponse,
+              }),
+            ),
           ),
         );
       }),
@@ -36,7 +42,11 @@ export const registerAdmin$ = createEffect(
         return userService.registerAdmin(user).pipe(
           map(() => lab1UserActions.adminRequestSentSuccessfully()),
           catchError((error: unknown) =>
-            of(lab1UserActions.requestFailed({error: error as ErrorResponse})),
+            of(
+              lab1UserActions.requestFailed({
+                error: error as HttpErrorResponse,
+              }),
+            ),
           ),
         );
       }),
@@ -55,7 +65,11 @@ export const login$ = createEffect(
         return userService.loginUser(user).pipe(
           map((response) => lab1UserActions.authResponseFetched({response})),
           catchError((error: unknown) =>
-            of(lab1UserActions.requestFailed({error: error as ErrorResponse})),
+            of(
+              lab1UserActions.requestFailed({
+                error: error as HttpErrorResponse,
+              }),
+            ),
           ),
         );
       }),
@@ -72,6 +86,7 @@ export const handleResponse$ = createEffect(
       ofType(lab1UserActions.authResponseFetched),
       tap(({response}) => {
         userService.storeTokens(response.tokens);
+        userService.storeUser(response.user);
       }),
       map(() => lab1RouterActions.navigateToHome()),
     );
@@ -85,7 +100,11 @@ export const handleRequestError$ = createEffect(
   (actions$ = inject(Actions)) => {
     return actions$.pipe(
       ofType(lab1UserActions.requestFailed),
-      map(({error}) => lab1RootActions.showHttpErrorAlert({error})),
+      map(({error}) =>
+        lab1RootActions.showHttpErrorAlert({
+          error: (error.error as ErrorResponse) ?? error,
+        }),
+      ),
     );
   },
   {functional: true},
@@ -118,6 +137,39 @@ export const enableLoading$ = createEffect(
         lab1UserActions.authResponseFetched,
       ),
       map(() => lab1RootActions.setLoading({loading: false})),
+    );
+  },
+  {functional: true},
+);
+
+export const logout$ = createEffect(
+  (actions$ = inject(Actions), userService = inject(UserService)) => {
+    return actions$.pipe(
+      ofType(lab1UserActions.logout),
+      tap(() => {
+        userService.removeTokens();
+        userService.removeUser();
+      }),
+      map(() => lab1RouterActions.navigateToWelcome()),
+    );
+  },
+  {functional: true},
+);
+
+export const fetchSavedResponse$ = createEffect(
+  (actions$ = inject(Actions), userService = inject(UserService)) => {
+    return actions$.pipe(
+      ofType(lab1RootActions.init),
+      map(() => {
+        return {
+          tokens: userService.getTokens(),
+          user: userService.getUser(),
+        };
+      }),
+      filter((response) => !!response.tokens && !!response.user),
+      map((response) =>
+        lab1UserActions.authResponseSavedFetched({response: response as AuthResponse}),
+      ),
     );
   },
   {functional: true},

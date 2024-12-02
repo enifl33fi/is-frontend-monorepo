@@ -1,3 +1,5 @@
+@import (reference) '@taiga-ui/core/styles/taiga-ui-local.less';
+
 :host {
   display: block;
 }
@@ -7,6 +9,12 @@
   height: 5rem;
   justify-content: flex-end;
   align-items: center;
+}
+
+.username {
+  font: var(--tui-font-text-s);
+  color: var(--tui-text-secondary);
+  font-weight: bold;
 }
 
 .buttons {

@@ -1,21 +1,47 @@
 <div class="wrapper">
-  <div class="buttons">
-    <button
-      appearance="flat-grayscale"
-      size="m"
-      tuiButton
-      (click)="onSignInClick()"
-    >
-      Sign In
-    </button>
+  @if (userSignal(); as user) {
+    <div class="username">{{ user.username }}</div>
+    <div class="buttons">
+      @if (user.isAdmin) {
+        <button
+          appearance="secondary"
+          iconStart="@tui.users"
+          size="s"
+          tuiHint="View requests"
+          tuiIconButton
+        >
+        </button>
+      }
 
-    <button
-      appearance="outline"
-      size="m"
-      tuiButton
-      (click)="onSignUpClick()"
-    >
-      Sign Up
-    </button>
-  </div>
+      <button
+        appearance="secondary-destructive"
+        iconStart="@tui.log-out"
+        size="s"
+        tuiHint="Logout"
+        tuiIconButton
+        (click)="onLogoutClick()"
+      >
+      </button>
+    </div>
+  } @else {
+    <div class="buttons">
+      <button
+        appearance="flat-grayscale"
+        size="m"
+        tuiButton
+        (click)="onSignInClick()"
+      >
+        Sign In
+      </button>
+
+      <button
+        appearance="outline"
+        size="m"
+        tuiButton
+        (click)="onSignUpClick()"
+      >
+        Sign Up
+      </button>
+    </div>
+  }
 </div>

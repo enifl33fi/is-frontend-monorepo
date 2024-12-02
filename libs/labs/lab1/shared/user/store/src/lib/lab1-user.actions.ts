@@ -1,4 +1,4 @@
-import type {ErrorResponse} from '@is/labs/lab1/shared/types';
+import type {HttpErrorResponse} from '@angular/common/http';
 import type {UserRegisterRequestDto, UserRequestDto} from '@is/labs/lab1/shared/user/dto';
 import type {AuthResponse} from '@is/labs/lab1/shared/user/types';
 import {createActionGroup, emptyProps, props} from '@ngrx/store';
@@ -14,7 +14,9 @@ export const lab1UserActions = createActionGroup({
     register: props<{user: UserRegisterRequestDto}>(),
     login: props<{user: UserRequestDto}>(),
     authResponseFetched: props<{response: AuthResponse}>(),
+    authResponseSavedFetched: props<{response: AuthResponse}>(),
     adminRequestSentSuccessfully: emptyProps(),
-    requestFailed: props<{error: ErrorResponse}>(),
+    requestFailed: props<{error: HttpErrorResponse}>(),
+    logout: emptyProps(),
   },
 });
