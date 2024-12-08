@@ -39,3 +39,27 @@ export const navigateToWelcome$ = createEffect(
   },
   {functional: true, dispatch: false},
 );
+
+export const navigateToHome = createEffect(
+  (actions$ = inject(Actions), router = inject(Router)) => {
+    return actions$.pipe(
+      ofType(lab1RouterActions.navigateToHome),
+      tap(() => {
+        void router.navigate(['lab1', 'home']);
+      }),
+    );
+  },
+  {functional: true, dispatch: false},
+);
+
+export const navigateToTab$ = createEffect(
+  (actions$ = inject(Actions), router = inject(Router)) => {
+    return actions$.pipe(
+      ofType(lab1RouterActions.navigateToTab),
+      tap(({tab}) => {
+        void router.navigate(['lab1', 'home', tab]);
+      }),
+    );
+  },
+  {functional: true, dispatch: false},
+);

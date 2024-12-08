@@ -3,7 +3,7 @@ import {createFeature, createReducer, on} from '@ngrx/store';
 import {lab1UserActions, userFeatureKey} from './lab1-user.actions';
 import type {UserState} from './user.state';
 
-export const initialUserState = {
+export const initialUserState: UserState = {
   rawUsername: '',
   user: null,
   tokens: null,

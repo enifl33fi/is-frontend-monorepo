@@ -1,13 +1,14 @@
 import {HttpClient} from '@angular/common/http';
 import {inject, Injectable} from '@angular/core';
 import {
+  RefreshTokensRequestDto,
   UserRegisterRequestDto,
   UserRequestDto,
   UserResponseDto,
 } from '@is/labs/lab1/shared/user/dto';
 import {AuthResponse, Tokens, User} from '@is/labs/lab1/shared/user/types';
 import {BACK_URL_TOKEN, LOCAL_STORAGE_TOKEN} from '@is/shared/utils';
-import {map, Observable} from 'rxjs';
+import {map, Observable, throwError} from 'rxjs';
 
 import {convertUserResponseDtoToAuthResponse} from './converters/user.converters';
 
@@ -24,6 +25,17 @@ export class UserService {
     return this.http
       .post<UserResponseDto>(`${this.backUrlSubject$.getValue()}/auth/register`, user)
       .pipe(map((dto: UserResponseDto) => convertUserResponseDtoToAuthResponse(dto)));
+  }
+
+  public refreshTokens(request: RefreshTokensRequestDto): Observable<AuthResponse> {
+    return request.refreshToken
+      ? this.http
+          .post<UserResponseDto>(
+            `${this.backUrlSubject$.getValue()}/auth/register`,
+            request,
+          )
+          .pipe(map((dto: UserResponseDto) => convertUserResponseDtoToAuthResponse(dto)))
+      : throwError(() => new Error('Invalid token'));
   }
 
   public loginUser(user: UserRequestDto): Observable<AuthResponse> {

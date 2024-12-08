@@ -1,0 +1,13 @@
+{
+  "name": "labs-lab1-shared-address-types",
+  "$schema": "../../../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/labs/lab1/shared/address/types/src",
+  "prefix": "lab1",
+  "projectType": "library",
+  "tags": ["domain:labs/lab1/shared", "type:types"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

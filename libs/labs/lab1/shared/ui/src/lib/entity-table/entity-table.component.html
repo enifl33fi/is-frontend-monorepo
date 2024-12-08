@@ -1,0 +1,124 @@
+@if (isFiltersEnabled()) {
+  <tui-accordion-item class="filters-wrapper">
+    Filters
+    <ng-template tuiAccordionItemContent>
+      <form
+        class="tui-form"
+        [formGroup]="filtersFormSignal()"
+      >
+        @for (filterColumn of filterColumns(); track filterColumn) {
+          <tui-textfield
+            tuiTextfieldSize="m"
+            class="tui-form__row"
+          >
+            <label tuiLabel>{{ filterColumn }}</label>
+            <input
+              tuiTextfield
+              [formControlName]="filterColumn"
+            />
+          </tui-textfield>
+        }
+      </form>
+    </ng-template>
+  </tui-accordion-item>
+}
+
+<div class="table-wrapper">
+  <table
+    tuiTable
+    class="table"
+    [columns]="actualColumns()"
+    [direction]="sortDirectionSignal()"
+    [tuiSortBy]="sortBySignal()"
+    (directionChange)="sortDirectionSignal.set($event)"
+    (tuiSortByChange)="sortBySignal.set($event + '')"
+  >
+    <thead>
+      <tr tuiThGroup>
+        @for (column of columns(); track column) {
+          <th
+            *tuiHead="column"
+            tuiSortable
+            tuiTh
+          >
+            {{ column }}
+          </th>
+        }
+        <th
+          *tuiHead="actionColumnName()"
+          tuiTh
+          [tuiSortable]="false"
+        >
+          {{ actionColumnName() }}
+        </th>
+      </tr>
+    </thead>
+
+    @let sortedEntities = actualDataSignal() | tuiTableSort;
+    <tbody
+      tuiTbody
+      [data]="sortedEntities"
+    >
+      @for (entity of sortedEntities; track entity) {
+        <tr tuiTr>
+          @for (column of columns(); track column) {
+            <td
+              *tuiCell="column"
+              tuiTd
+            >
+              {{ entity[column] }}
+            </td>
+          }
+
+          @if (entity.hasAccess) {
+            <td
+              *tuiCell="actionColumnName()"
+              tuiTd
+              class="buttons"
+            >
+              <button
+                appearance="flat"
+                iconStart="@tui.eye"
+                size="xs"
+                tuiHint="View"
+                tuiIconButton
+              >
+              </button>
+
+              <button
+                appearance="flat-destructive"
+                iconStart="@tui.trash"
+                size="xs"
+                tuiHint="Remove"
+                tuiIconButton
+              >
+              </button>
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+
+    <caption
+      tuiCaption
+      class="footer"
+    >
+      <button
+        appearance="flat"
+        iconStart="@tui.plus"
+        size="s"
+        tuiHint="Add"
+        tuiIconButton
+      >
+      </button>
+      <div>
+        <tui-table-pagination
+          [page]="page()"
+          [size]="sizeSignal()"
+          [total]="entities().length"
+          (paginationChange)="onPaginationChange($event)"
+        ></tui-table-pagination>
+      </div>
+    </caption>
+  </table>
+</div>

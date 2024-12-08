@@ -1,0 +1,12 @@
+<tui-tabs-with-more>
+  @for (tab of tabs; track tab) {
+    <button
+      *tuiItem
+      tuiTab
+      type="button"
+      (click)="onClick(tab)"
+    >
+      {{ tab | titlecase }}
+    </button>
+  }
+</tui-tabs-with-more>
