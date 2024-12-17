@@ -14,7 +14,8 @@
         "project": ["tsconfig.*?.json"]
       },
       "rules": {
-        "arrow-body-style": "off"
+        "arrow-body-style": "off",
+        "rxjs/no-unsafe-first": "off"
       }
     },
     {

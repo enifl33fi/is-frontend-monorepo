@@ -11,7 +11,7 @@ import {
 import {toObservable, toSignal} from '@angular/core/rxjs-interop';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {TableEntity} from '@is/labs/lab1/shared/types';
-import {filterFn, paginateFn, sortFn} from '@is/labs/lab1/shared/utils';
+import {fullFilterFn, paginateFn, sortFn} from '@is/labs/lab1/shared/utils';
 import {
   TuiTable,
   TuiTablePagination,
@@ -70,7 +70,7 @@ export class EntityTableComponent {
     toObservable(this.filtersFormSignal).pipe(
       switchMap((form) =>
         form.valueChanges.pipe(
-          debounceTime(500),
+          debounceTime(300),
           map(() => form.getRawValue()),
           startWith(form.getRawValue()),
         ),
@@ -108,7 +108,7 @@ export class EntityTableComponent {
       entities
         .filter((entity) =>
           Object.keys(filtersValues).every((key) =>
-            filterFn(entity[key], filtersValues[key]),
+            fullFilterFn(entity[key], filtersValues[key]),
           ),
         )
         .sort(sortFn(sortBy, sortDirection)),

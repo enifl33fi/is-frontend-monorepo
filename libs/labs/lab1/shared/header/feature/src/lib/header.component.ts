@@ -29,4 +29,8 @@ export class HeaderComponent {
   public onLogoutClick() {
     this.store.dispatch(lab1UserActions.logout());
   }
+
+  public onShowAdminRequestsClick() {
+    this.store.dispatch(lab1UserActions.showRequests());
+  }
 }

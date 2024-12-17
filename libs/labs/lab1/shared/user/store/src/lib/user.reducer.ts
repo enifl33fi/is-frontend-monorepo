@@ -7,6 +7,7 @@ export const initialUserState: UserState = {
   rawUsername: '',
   user: null,
   tokens: null,
+  adminRequests: [],
 };
 
 export const userStore = createFeature({
@@ -35,6 +36,13 @@ export const userStore = createFeature({
         ...state,
         user: null,
         tokens: null,
+      }),
+    ),
+    on(
+      lab1UserActions.adminRequestsFetched,
+      (state, {requests}): UserState => ({
+        ...state,
+        adminRequests: requests,
       }),
     ),
   ),

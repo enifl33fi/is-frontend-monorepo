@@ -1,0 +1,14 @@
+import type {Person, TablePerson} from '@is/labs/lab1/shared/person/types';
+
+export function convertPersonToTablePerson(person: Person): TablePerson {
+  return {
+    id: person.id,
+    hasAccess: person.hasAccess,
+    locationId: person.location.id,
+    name: person.name,
+    eyeColor: person.eyeColor,
+    hairColor: person.hairColor,
+    birthday: person.birthday,
+    nationality: person.nationality,
+  };
+}

@@ -1,5 +1,8 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, Signal} from '@angular/core';
+import {selectAddresses} from '@is/labs/lab1/shared/address/store';
+import {TableEntity} from '@is/labs/lab1/shared/types';
 import {EntityTableComponent} from '@is/labs/lab1/shared/ui';
+import {Store} from '@ngrx/store';
 
 @Component({
   standalone: true,
@@ -10,6 +13,12 @@ import {EntityTableComponent} from '@is/labs/lab1/shared/ui';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddressTableComponent {
+  private readonly store = inject(Store);
+
   public columns: string[] = ['id', 'townId', 'zipCode'];
   public filterColumns: string[] = ['zipCode'];
+
+  public readonly addressesSignal = this.store.selectSignal(
+    selectAddresses,
+  ) as unknown as Signal<TableEntity[]>;
 }

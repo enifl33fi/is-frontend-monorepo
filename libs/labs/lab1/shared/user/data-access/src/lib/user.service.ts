@@ -6,7 +6,7 @@ import {
   UserRequestDto,
   UserResponseDto,
 } from '@is/labs/lab1/shared/user/dto';
-import {AuthResponse, Tokens, User} from '@is/labs/lab1/shared/user/types';
+import {AdminRequest, AuthResponse, Tokens, User} from '@is/labs/lab1/shared/user/types';
 import {BACK_URL_TOKEN, LOCAL_STORAGE_TOKEN} from '@is/shared/utils';
 import {map, Observable, throwError} from 'rxjs';
 
@@ -31,11 +31,31 @@ export class UserService {
     return request.refreshToken
       ? this.http
           .post<UserResponseDto>(
-            `${this.backUrlSubject$.getValue()}/auth/register`,
+            `${this.backUrlSubject$.getValue()}/auth/refresh`,
             request,
           )
           .pipe(map((dto: UserResponseDto) => convertUserResponseDtoToAuthResponse(dto)))
       : throwError(() => new Error('Invalid token'));
+  }
+
+  public getAdminRequests(): Observable<AdminRequest[]> {
+    return this.http.get<AdminRequest[]>(
+      `${this.backUrlSubject$.getValue()}/admin/requests`,
+    );
+  }
+
+  public approveAdminRequests(request: AdminRequest): Observable<void> {
+    return this.http.post<void>(
+      `${this.backUrlSubject$.getValue()}/admin/request/${request.username}/approve`,
+      {},
+    );
+  }
+
+  public rejectAdminRequests(request: AdminRequest): Observable<void> {
+    return this.http.delete<void>(
+      `${this.backUrlSubject$.getValue()}/admin/request/${request.username}/reject`,
+      {},
+    );
   }
 
   public loginUser(user: UserRequestDto): Observable<AuthResponse> {

@@ -33,6 +33,11 @@ export const appRoutes: Route[] = [
           import('@is/labs/lab1/home-page/feature').then((m) => m.HomePageComponent),
         children: [
           {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: 'product',
+          },
+          {
             path: 'product',
             pathMatch: 'full',
             loadComponent: async () =>

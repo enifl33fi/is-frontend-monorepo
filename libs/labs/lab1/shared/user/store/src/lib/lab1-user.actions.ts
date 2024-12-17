@@ -1,6 +1,6 @@
 import type {HttpErrorResponse} from '@angular/common/http';
 import type {UserRegisterRequestDto, UserRequestDto} from '@is/labs/lab1/shared/user/dto';
-import type {AuthResponse} from '@is/labs/lab1/shared/user/types';
+import type {AdminRequest, AuthResponse} from '@is/labs/lab1/shared/user/types';
 import {createActionGroup, emptyProps, props} from '@ngrx/store';
 
 export const userFeatureKey = 'user';
@@ -18,5 +18,12 @@ export const lab1UserActions = createActionGroup({
     adminRequestSentSuccessfully: emptyProps(),
     requestFailed: props<{error: HttpErrorResponse}>(),
     logout: emptyProps(),
+    fetchAdminRequests: emptyProps(),
+    adminRequestsFetched: props<{requests: AdminRequest[]}>(),
+    showRequests: emptyProps(),
+    approveRequest: props<{request: AdminRequest}>(),
+    rejectRequest: props<{request: AdminRequest}>(),
+    approveRequestCompleted: emptyProps(),
+    rejectRequestCompleted: emptyProps(),
   },
 });

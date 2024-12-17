@@ -1,0 +1,47 @@
+@import (reference) '@taiga-ui/core/styles/taiga-ui-local.less';
+
+:host {
+  display: block;
+}
+
+.tui-form {
+  margin-top: 1.5rem;
+}
+
+.username {
+  font: var(--tui-font-text-s);
+  color: var(--tui-text-secondary);
+  font-weight: bold;
+}
+
+.subtitle {
+  margin-top: 1rem;
+  font: var(--tui-font-heading-6);
+}
+
+.requests {
+  margin-top: 1.5rem;
+  overflow-y: auto;
+  max-height: 10rem;
+}
+
+.request {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  padding: 0.2rem 0;
+
+  &:not(:last-child) {
+    content: '';
+    border-bottom: 2px solid var(--tui-border-normal);
+  }
+}
+
+.buttons {
+  display: flex;
+
+  & > * {
+    margin-left: 0.5rem;
+  }
+}

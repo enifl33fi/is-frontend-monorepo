@@ -1,4 +1,6 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
+import {lab1RootActions} from '@is/labs/lab1/shared/root/store';
+import {Store} from '@ngrx/store';
 
 import {AddressTableComponent} from './address-table/address-table.component';
 
@@ -10,4 +12,10 @@ import {AddressTableComponent} from './address-table/address-table.component';
   styleUrls: ['./address-page.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AddressPageComponent {}
+export class AddressPageComponent implements OnInit {
+  private readonly store = inject(Store);
+
+  public ngOnInit() {
+    this.store.dispatch(lab1RootActions.setActiveTab({activeTab: 'address'}));
+  }
+}

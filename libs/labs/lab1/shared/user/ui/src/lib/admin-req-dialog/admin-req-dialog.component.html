@@ -1,0 +1,44 @@
+<form
+  class="tui-form"
+  [formGroup]="searchForm"
+>
+  <tui-textfield
+    iconStart="@tui.search"
+    tuiTextfieldSize="m"
+    class="tui-form__row"
+  >
+    <label tuiLabel>Search</label>
+    <input
+      formControlName="usernamePrefix"
+      tuiTextfield
+    />
+  </tui-textfield>
+</form>
+
+<div class="requests">
+  @for (request of filteredAdminRequestsSignal(); track request) {
+    <div class="request">
+      <div class="username">{{ request.username }}</div>
+
+      <div class="buttons">
+        <button
+          appearance="positive"
+          iconStart="@tui.check"
+          size="s"
+          tuiHint="Approve"
+          tuiIconButton
+          (click)="onApproveRequestClick(request)"
+        ></button>
+
+        <button
+          appearance="negative"
+          iconStart="@tui.x"
+          size="s"
+          tuiHint="Reject"
+          tuiIconButton
+          (click)="onRejectRequestClick(request)"
+        ></button>
+      </div>
+    </div>
+  }
+</div>

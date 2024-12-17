@@ -1,7 +1,7 @@
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
-import {lab1RootActions} from '@is/labs/lab1/shared/root/store';
 import {Tab, TABS} from '@is/labs/lab1/shared/root/types';
+import {lab1RouterActions} from '@is/labs/lab1/shared/router/store';
 import {Store} from '@ngrx/store';
 import {TuiTabs} from '@taiga-ui/kit';
 
@@ -19,6 +19,6 @@ export class HomeHeaderComponent {
   public readonly tabs = TABS;
 
   public onClick(tab: Tab): void {
-    this.store.dispatch(lab1RootActions.setActiveTab({activeTab: tab}));
+    this.store.dispatch(lab1RouterActions.navigateToTab({tab}));
   }
 }

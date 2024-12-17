@@ -42,7 +42,7 @@ export class TokenInterceptor implements HttpInterceptor {
     req: HttpRequest<unknown>,
     next: HttpHandler,
   ): Observable<HttpEvent<unknown>> {
-    if (!req.url.includes(`${this.backUrl.getValue()}/auth`)) {
+    if (req.url.includes(`${this.backUrl.getValue()}/auth`)) {
       return next.handle(req);
     }
 
