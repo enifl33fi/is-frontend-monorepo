@@ -1,3 +1,8 @@
 import {addressStore} from './address.reducer';
 
-export const {selectAddresses} = addressStore;
+export const {
+  selectAddresses,
+  selectDialogLoading,
+  selectSelectedAddress,
+  selectOwnAddressesIds,
+} = addressStore;

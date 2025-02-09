@@ -82,6 +82,7 @@
                 size="xs"
                 tuiHint="View"
                 tuiIconButton
+                (click)="handleViewClick.emit(entity.id)"
               >
               </button>
 
@@ -91,6 +92,7 @@
                 size="xs"
                 tuiHint="Remove"
                 tuiIconButton
+                (click)="handleDeleteClick.emit(entity.id)"
               >
               </button>
             </td>
@@ -109,6 +111,7 @@
         size="s"
         tuiHint="Add"
         tuiIconButton
+        (click)="handleAddClick.emit()"
       >
       </button>
       <div>

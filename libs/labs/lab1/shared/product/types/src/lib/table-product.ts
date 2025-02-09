@@ -1,8 +1,8 @@
-import type {Entity} from '@is/labs/lab1/shared/types';
+import type {Entity, FormEntity} from '@is/labs/lab1/shared/types';
 
 import type {UnitOfMeasure} from './unit-of-measure';
 
-export interface TableProduct extends Entity {
+export interface ProductData {
   coordinatesId: number;
   manufacturerId: number;
   ownerId: number;
@@ -13,3 +13,10 @@ export interface TableProduct extends Entity {
   rating: number;
   partNumber: string;
 }
+
+export interface TableProduct extends Entity, ProductData {}
+
+export interface FormProduct
+  extends FormEntity,
+    ProductData,
+    Partial<Omit<Entity, 'hasAccess'>> {}

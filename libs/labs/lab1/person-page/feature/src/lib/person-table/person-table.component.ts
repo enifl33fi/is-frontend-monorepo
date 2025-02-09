@@ -1,5 +1,8 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, Signal} from '@angular/core';
+import {lab1PersonActions, selectPersons} from '@is/labs/lab1/shared/person/store';
+import {TableEntity} from '@is/labs/lab1/shared/types';
 import {EntityTableComponent} from '@is/labs/lab1/shared/ui';
+import {Store} from '@ngrx/store';
 
 @Component({
   standalone: true,
@@ -10,6 +13,8 @@ import {EntityTableComponent} from '@is/labs/lab1/shared/ui';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersonTableComponent {
+  private readonly store = inject(Store);
+
   public columns: string[] = [
     'id',
     'locationId',
@@ -21,4 +26,20 @@ export class PersonTableComponent {
   ];
 
   public filterColumns: string[] = ['name', 'eyeColor', 'hairColor', 'nationality'];
+
+  public readonly personsSignal = this.store.selectSignal(
+    selectPersons,
+  ) as unknown as Signal<TableEntity[]>;
+
+  public onAddClick() {
+    this.store.dispatch(lab1PersonActions.showAddDialog());
+  }
+
+  public onViewClick(id: number) {
+    this.store.dispatch(lab1PersonActions.showViewDialog({id}));
+  }
+
+  public onDeleteClick(id: number) {
+    this.store.dispatch(lab1PersonActions.deletePerson({id}));
+  }
 }

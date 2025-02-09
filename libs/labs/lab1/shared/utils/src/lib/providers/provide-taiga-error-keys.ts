@@ -6,5 +6,8 @@ export function provideTaigaErrorKeys(): Provider {
     required: "Field can't be empty",
     notBlank: "Field can't be blank",
     invalidUsername: 'Username can only contain latin letters, numbers, and the symbol _',
+    min: 'Insert bigger number',
+    maxLength: 'Insert less characters',
+    minLength: 'Insert more characters',
   });
 }

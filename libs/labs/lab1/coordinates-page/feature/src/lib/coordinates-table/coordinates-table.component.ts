@@ -1,5 +1,8 @@
 import {ChangeDetectionStrategy, Component, inject, Signal} from '@angular/core';
-import {selectCoordinates} from '@is/labs/lab1/shared/coordinates/store';
+import {
+  lab1CoordinatesActions,
+  selectCoordinates,
+} from '@is/labs/lab1/shared/coordinates/store';
 import {TableEntity} from '@is/labs/lab1/shared/types';
 import {EntityTableComponent} from '@is/labs/lab1/shared/ui';
 import {Store} from '@ngrx/store';
@@ -19,4 +22,16 @@ export class CoordinatesTableComponent {
   public readonly coordinatesSignal = this.store.selectSignal(
     selectCoordinates,
   ) as unknown as Signal<TableEntity[]>;
+
+  public onAddClick() {
+    this.store.dispatch(lab1CoordinatesActions.showAddDialog());
+  }
+
+  public onViewClick(id: number) {
+    this.store.dispatch(lab1CoordinatesActions.showViewDialog({id}));
+  }
+
+  public onDeleteClick(id: number) {
+    this.store.dispatch(lab1CoordinatesActions.deleteCoordinates({id}));
+  }
 }

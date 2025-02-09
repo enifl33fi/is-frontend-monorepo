@@ -1,0 +1,56 @@
+<lab1-address-form
+  [entity]="entity()"
+  [locationIds]="locationIds()"
+  [locked]="locked()"
+  (handleForm)="updateAddress($event)"
+>
+</lab1-address-form>
+
+<div class="tui-form__buttons">
+  @if (!entity()) {
+    <button
+      appearance="primary"
+      size="m"
+      tuiButton
+      class="tui-form__button"
+      [disabled]="!formAddressSignal()"
+      [loading]="loadingSignal()"
+      (click)="onAddClick()"
+    >
+      Add
+    </button>
+  } @else if (!locked()) {
+    <button
+      appearance="primary"
+      size="m"
+      tuiButton
+      class="tui-form__button"
+      [disabled]="!formAddressSignal()"
+      [loading]="loadingSignal()"
+      (click)="onSaveChangesClick()"
+    >
+      Save changes
+    </button>
+  } @else {
+    <button
+      appearance="primary"
+      size="m"
+      tuiButton
+      class="tui-form__button"
+      (click)="onUpdateClick()"
+    >
+      Update
+    </button>
+  }
+
+  <button
+    appearance="secondary-destructive"
+    size="m"
+    tuiButton
+    class="tui-form__button"
+    [disabled]="loadingSignal()"
+    (click)="onCloseClick()"
+  >
+    Close
+  </button>
+</div>

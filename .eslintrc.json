@@ -15,7 +15,11 @@
       },
       "rules": {
         "arrow-body-style": "off",
-        "rxjs/no-unsafe-first": "off"
+        "rxjs/no-unsafe-first": "off",
+        "rxjs/no-unsafe-switchmap": "off",
+        "no-restricted-imports": "off",
+        "@typescript-eslint/max-params": "off",
+        "@ngrx/no-multiple-actions-in-effects": "off"
       }
     },
     {

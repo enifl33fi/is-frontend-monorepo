@@ -1,3 +1,8 @@
 import {organizationStore} from './organization.reducer';
 
-export const {selectOrganizations} = organizationStore;
+export const {
+  selectOrganizations,
+  selectDialogLoading,
+  selectSelectedOrganization,
+  selectOwnOrganizationIds,
+} = organizationStore;

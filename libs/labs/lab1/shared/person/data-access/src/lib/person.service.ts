@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {inject, Injectable, OnDestroy} from '@angular/core';
 import {lab1PersonActions} from '@is/labs/lab1/shared/person/store';
-import {Person, TablePerson} from '@is/labs/lab1/shared/person/types';
+import {FormPerson, Person, TablePerson} from '@is/labs/lab1/shared/person/types';
 import {WS_URL_TOKEN} from '@is/labs/lab1/shared/utils';
 import {BACK_URL_TOKEN} from '@is/shared/utils';
 import {Store} from '@ngrx/store';
@@ -44,6 +44,25 @@ export class PersonService implements OnDestroy {
 
   public onStompMessage() {
     this.store.dispatch(lab1PersonActions.fetchPersons());
+  }
+
+  public addPerson(person: FormPerson): Observable<Person> {
+    return this.http.post<Person>(`${this.backUrlSubject$.getValue()}/person`, person);
+  }
+
+  public updatePerson(person: FormPerson): Observable<Person> {
+    return this.http.patch<Person>(
+      `${this.backUrlSubject$.getValue()}/person/${person.id}`,
+      person,
+    );
+  }
+
+  public deletePerson(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.backUrlSubject$.getValue()}/person/${id}`);
+  }
+
+  public getOwnIds(): Observable<number[]> {
+    return this.http.get<number[]>(`${this.backUrlSubject$.getValue()}/person/own`);
   }
 
   public ngOnDestroy() {

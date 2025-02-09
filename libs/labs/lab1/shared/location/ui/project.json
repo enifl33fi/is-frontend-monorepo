@@ -1,0 +1,20 @@
+{
+  "name": "labs-lab1-shared-location-ui",
+  "$schema": "../../../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/labs/lab1/shared/location/ui/src",
+  "prefix": "lab1",
+  "projectType": "library",
+  "tags": ["domain:labs/lab1/shared", "type:ui"],
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/labs/lab1/shared/location/ui/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

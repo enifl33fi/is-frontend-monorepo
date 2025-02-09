@@ -2,4 +2,7 @@
   [columns]="columns"
   [entities]="locationsSignal()"
   [filterColumns]="filterColumns"
+  (handleAddClick)="onAddClick()"
+  (handleDeleteClick)="onDeleteClick($event)"
+  (handleViewClick)="onViewClick($event)"
 ></lab1-entity-table>

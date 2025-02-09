@@ -1,0 +1,53 @@
+<form
+  class="tui-form"
+  [formGroup]="form"
+>
+  <div class="tui-form__header">Coordinates</div>
+  <div class="tui-form__row tui-form__row_multi-fields">
+    <div class="tui-form__multi-field">
+      <tui-input-number
+        formControlName="x"
+        [tuiTextfieldCleaner]="true"
+      >
+        x
+        <input tuiTextfieldLegacy />
+      </tui-input-number>
+
+      <tui-error
+        formControlName="x"
+        [error]="[] | tuiFieldError | async"
+      ></tui-error>
+    </div>
+
+    <div class="tui-form__multi-field">
+      <tui-input-number
+        formControlName="y"
+        [tuiNumberFormat]="{precision: 4, decimalMode: 'not-zero'}"
+        [tuiTextfieldCleaner]="true"
+      >
+        y
+        <input tuiTextfieldLegacy />
+      </tui-input-number>
+
+      <tui-error
+        formControlName="y"
+        [error]="[] | tuiFieldError | async"
+      ></tui-error>
+    </div>
+  </div>
+
+  @if (!entity()) {
+    <div class="tui-form__row">
+      <label tuiLabel>
+        <input
+          formControlName="adminPermission"
+          size="m"
+          tuiSwitch
+          type="checkbox"
+          [showIcons]="true"
+        />
+        Give admin permission
+      </label>
+    </div>
+  }
+</form>

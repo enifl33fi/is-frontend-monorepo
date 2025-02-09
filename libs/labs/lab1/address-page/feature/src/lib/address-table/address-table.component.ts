@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, inject, Signal} from '@angular/core';
-import {selectAddresses} from '@is/labs/lab1/shared/address/store';
+import {lab1AddressActions, selectAddresses} from '@is/labs/lab1/shared/address/store';
 import {TableEntity} from '@is/labs/lab1/shared/types';
 import {EntityTableComponent} from '@is/labs/lab1/shared/ui';
 import {Store} from '@ngrx/store';
@@ -21,4 +21,16 @@ export class AddressTableComponent {
   public readonly addressesSignal = this.store.selectSignal(
     selectAddresses,
   ) as unknown as Signal<TableEntity[]>;
+
+  public onAddClick() {
+    this.store.dispatch(lab1AddressActions.showAddDialog());
+  }
+
+  public onViewClick(id: number) {
+    this.store.dispatch(lab1AddressActions.showViewDialog({id}));
+  }
+
+  public onDeleteClick(id: number) {
+    this.store.dispatch(lab1AddressActions.deleteAddress({id}));
+  }
 }

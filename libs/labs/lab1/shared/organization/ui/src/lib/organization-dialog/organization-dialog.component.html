@@ -1,0 +1,55 @@
+<lab1-organization-form
+  [addressIds]="addressIds()"
+  [entity]="entity()"
+  [locked]="locked()"
+  (handleForm)="updateOrganization($event)"
+></lab1-organization-form>
+
+<div class="tui-form__buttons">
+  @if (!entity()) {
+    <button
+      appearance="primary"
+      size="m"
+      tuiButton
+      class="tui-form__button"
+      [disabled]="!formOrganizationSignal()"
+      [loading]="loadingSignal()"
+      (click)="onAddClick()"
+    >
+      Add
+    </button>
+  } @else if (!locked()) {
+    <button
+      appearance="primary"
+      size="m"
+      tuiButton
+      class="tui-form__button"
+      [disabled]="!formOrganizationSignal()"
+      [loading]="loadingSignal()"
+      (click)="onSaveChangesClick()"
+    >
+      Save changes
+    </button>
+  } @else {
+    <button
+      appearance="primary"
+      size="m"
+      tuiButton
+      class="tui-form__button"
+      (click)="onUpdateClick()"
+    >
+      Update
+    </button>
+  }
+
+  <button
+    appearance="secondary-destructive"
+    size="m"
+    tuiButton
+    class="tui-form__button"
+    [disabled]="loadingSignal()"
+    (click)="onCloseClick()"
+  >
+    Close
+  </button>
+</div>

@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {inject, Injectable, OnDestroy} from '@angular/core';
 import {lab1AddressActions} from '@is/labs/lab1/shared/address/store';
-import {Address, TableAddress} from '@is/labs/lab1/shared/address/types';
+import {Address, FormAddress, TableAddress} from '@is/labs/lab1/shared/address/types';
 import {WS_URL_TOKEN} from '@is/labs/lab1/shared/utils';
 import {BACK_URL_TOKEN} from '@is/shared/utils';
 import {Store} from '@ngrx/store';
@@ -44,6 +44,25 @@ export class AddressService implements OnDestroy {
 
   public onStompMessage() {
     this.store.dispatch(lab1AddressActions.fetchAddresses());
+  }
+
+  public addAddress(address: FormAddress): Observable<Address> {
+    return this.http.post<Address>(`${this.backUrlSubject$.getValue()}/address`, address);
+  }
+
+  public updateAddress(address: FormAddress): Observable<Address> {
+    return this.http.patch<Address>(
+      `${this.backUrlSubject$.getValue()}/address/${address.id}`,
+      address,
+    );
+  }
+
+  public deleteAddress(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.backUrlSubject$.getValue()}/address/${id}`);
+  }
+
+  public getOwnIds(): Observable<number[]> {
+    return this.http.get<number[]>(`${this.backUrlSubject$.getValue()}/address/own`);
   }
 
   public ngOnDestroy() {

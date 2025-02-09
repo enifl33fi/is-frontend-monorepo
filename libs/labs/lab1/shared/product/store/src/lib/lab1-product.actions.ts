@@ -1,5 +1,9 @@
 import type {HttpErrorResponse} from '@angular/common/http';
-import type {TableProduct} from '@is/labs/lab1/shared/product/types';
+import type {
+  FormProduct,
+  Product,
+  TableProduct,
+} from '@is/labs/lab1/shared/product/types';
 import {createActionGroup, emptyProps, props} from '@ngrx/store';
 
 export const productFeatureKey = 'product';
@@ -9,6 +13,17 @@ export const lab1ProductActions = createActionGroup({
   events: {
     fetchProducts: emptyProps(),
     productsFetched: props<{products: TableProduct[]}>(),
-    productFetchFailed: props<{error: HttpErrorResponse}>(),
+    productRequestFailed: props<{error: HttpErrorResponse}>(),
+    fetchProductById: props<{id: number}>(),
+    setDialogLoading: props<{dialogLoading: boolean}>(),
+    addProduct: props<{product: FormProduct}>(),
+    updateProduct: props<{product: FormProduct}>(),
+    deleteProduct: props<{id: number}>(),
+    productByIdFetched: props<{product: Product}>(),
+    addProductCompleted: props<{product: Product}>(),
+    updateProductCompleted: props<{product: Product}>(),
+    deleteProductCompleted: emptyProps(),
+    showViewDialog: props<{id: number}>(),
+    showAddDialog: emptyProps(),
   },
 });

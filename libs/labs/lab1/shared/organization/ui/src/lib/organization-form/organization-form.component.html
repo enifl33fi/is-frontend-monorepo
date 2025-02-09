@@ -1,0 +1,129 @@
+<form
+  class="tui-form"
+  [formGroup]="form"
+>
+  <div class="tui-form__header">Organization</div>
+  <div class="tui-form__row tui-form__row_multi-fields">
+    <div class="tui-form__multi-field">
+      <tui-input
+        formControlName="name"
+        [tuiTextfieldCleaner]="true"
+      >
+        name
+        <input tuiTextfieldLegacy />
+      </tui-input>
+
+      <tui-error
+        formControlName="name"
+        [error]="[] | tuiFieldError | async"
+      ></tui-error>
+    </div>
+    <div class="tui-form__multi-field">
+      <tui-input
+        formControlName="fullName"
+        [tuiTextfieldCleaner]="true"
+      >
+        fullName
+        <input tuiTextfieldLegacy />
+      </tui-input>
+
+      <tui-error
+        formControlName="fullName"
+        [error]="[] | tuiFieldError | async"
+      ></tui-error>
+    </div>
+  </div>
+
+  <div class="tui-form__row tui-form__row_multi-fields">
+    <div class="tui-form__multi-field">
+      <tui-combo-box formControlName="officialAddressId">
+        officialAddressId
+        <input tuiTextfieldLegacy />
+        <tui-data-list-wrapper
+          *tuiDataList
+          [items]="addressIds() | tuiFilterByInput"
+        />
+      </tui-combo-box>
+      <tui-error
+        formControlName="officialAddressId"
+        [error]="[] | tuiFieldError | async"
+      ></tui-error>
+    </div>
+    <div class="tui-form__multi-field">
+      <tui-combo-box formControlName="postalAddressId">
+        postalAddressId
+        <input tuiTextfieldLegacy />
+        <tui-data-list-wrapper
+          *tuiDataList
+          [items]="addressIds() | tuiFilterByInput"
+        />
+      </tui-combo-box>
+      <tui-error
+        formControlName="postalAddressId"
+        [error]="[] | tuiFieldError | async"
+      ></tui-error>
+    </div>
+  </div>
+
+  <div class="tui-form__row tui-form__row_multi-fields">
+    <div class="tui-form__multi-field">
+      <tui-input-number
+        formControlName="annualTurnover"
+        [tuiNumberFormat]="{precision: 4, decimalMode: 'not-zero'}"
+        [tuiTextfieldCleaner]="true"
+      >
+        annualTurnover
+        <input tuiTextfieldLegacy />
+      </tui-input-number>
+
+      <tui-error
+        formControlName="annualTurnover"
+        [error]="[] | tuiFieldError | async"
+      ></tui-error>
+    </div>
+    <div class="tui-form__multi-field">
+      <tui-input-number
+        formControlName="rating"
+        [tuiNumberFormat]="{precision: 4, decimalMode: 'not-zero'}"
+        [tuiTextfieldCleaner]="true"
+      >
+        rating
+        <input tuiTextfieldLegacy />
+      </tui-input-number>
+
+      <tui-error
+        formControlName="rating"
+        [error]="[] | tuiFieldError | async"
+      ></tui-error>
+    </div>
+  </div>
+
+  <tui-input-number
+    formControlName="employeesCount"
+    class="tui-form__row"
+    [tuiTextfieldCleaner]="true"
+  >
+    employeesCount
+    <input tuiTextfieldLegacy />
+  </tui-input-number>
+
+  <tui-error
+    formControlName="employeesCount"
+    [error]="[] | tuiFieldError | async"
+  ></tui-error>
+
+  @if (!entity()) {
+    <div class="tui-form__row">
+      <label tuiLabel>
+        <input
+          formControlName="adminPermission"
+          size="m"
+          tuiSwitch
+          type="checkbox"
+          [showIcons]="true"
+        />
+        Give admin permission
+      </label>
+    </div>
+  }
+</form>

@@ -1,0 +1,110 @@
+<form
+  class="tui-form"
+  [formGroup]="form"
+>
+  <div class="tui-form__header">Person</div>
+  <tui-combo-box
+    formControlName="locationId"
+    class="tui-form__row"
+  >
+    locationId
+    <input tuiTextfieldLegacy />
+    <tui-data-list-wrapper
+      *tuiDataList
+      [items]="locationIds() | tuiFilterByInput"
+    />
+  </tui-combo-box>
+  <tui-error
+    formControlName="locationId"
+    [error]="[] | tuiFieldError | async"
+  ></tui-error>
+
+  <tui-input
+    formControlName="name"
+    class="tui-form__row"
+    [tuiTextfieldCleaner]="true"
+  >
+    name
+    <input tuiTextfieldLegacy />
+  </tui-input>
+  <tui-error
+    formControlName="name"
+    [error]="[] | tuiFieldError | async"
+  ></tui-error>
+
+  <div class="tui-form__row tui-form__row_multi-fields">
+    <div class="tui-form__multi-field">
+      <tui-combo-box formControlName="eyeColor">
+        eyeColor
+        <input tuiTextfieldLegacy />
+        <tui-data-list-wrapper
+          *tuiDataList
+          [items]="COLORS | tuiFilterByInput"
+        />
+      </tui-combo-box>
+      <tui-error
+        formControlName="eyeColor"
+        [error]="[] | tuiFieldError | async"
+      ></tui-error>
+    </div>
+    <div class="tui-form__multi-field">
+      <tui-combo-box formControlName="hairColor">
+        hairColor
+        <input tuiTextfieldLegacy />
+        <tui-data-list-wrapper
+          *tuiDataList
+          [items]="COLORS | tuiFilterByInput"
+        />
+      </tui-combo-box>
+      <tui-error
+        formControlName="hairColor"
+        [error]="[] | tuiFieldError | async"
+      ></tui-error>
+    </div>
+  </div>
+
+  <tui-input-date
+    formControlName="birthday"
+    class="tui-form__row"
+    [tuiTextfieldCleaner]="true"
+  >
+    birthday
+    <input tuiTextfieldLegacy />
+  </tui-input-date>
+
+  <tui-error
+    formControlName="birthday"
+    [error]="[] | tuiFieldError | async"
+  ></tui-error>
+
+  <tui-combo-box
+    formControlName="nationality"
+    class="tui-form__row"
+  >
+    nationality
+    <input tuiTextfieldLegacy />
+    <tui-data-list-wrapper
+      *tuiDataList
+      [items]="COUNTRIES | tuiFilterByInput"
+    />
+  </tui-combo-box>
+  <tui-error
+    formControlName="nationality"
+    [error]="[] | tuiFieldError | async"
+  ></tui-error>
+
+  @if (!entity()) {
+    <div class="tui-form__row">
+      <label tuiLabel>
+        <input
+          formControlName="adminPermission"
+          size="m"
+          tuiSwitch
+          type="checkbox"
+          [showIcons]="true"
+        />
+        Give admin permission
+      </label>
+    </div>
+  }
+</form>

@@ -1,0 +1,159 @@
+<form
+  class="tui-form"
+  [formGroup]="form"
+>
+  <div class="tui-form__header">Product</div>
+
+  <tui-combo-box
+    formControlName="coordinatesId"
+    class="tui-form__row"
+  >
+    coordinatesId
+    <input tuiTextfieldLegacy />
+    <tui-data-list-wrapper
+      *tuiDataList
+      [items]="coordinatesIds() | tuiFilterByInput"
+    />
+  </tui-combo-box>
+  <tui-error
+    formControlName="coordinatesId"
+    [error]="[] | tuiFieldError | async"
+  ></tui-error>
+
+  <tui-combo-box
+    formControlName="ownerId"
+    class="tui-form__row"
+  >
+    ownerId
+    <input tuiTextfieldLegacy />
+    <tui-data-list-wrapper
+      *tuiDataList
+      [items]="ownerIds() | tuiFilterByInput"
+    />
+  </tui-combo-box>
+  <tui-error
+    formControlName="ownerId"
+    [error]="[] | tuiFieldError | async"
+  ></tui-error>
+
+  <div class="tui-form__row tui-form__row_multi-fields">
+    <div class="tui-form__multi-field">
+      <tui-combo-box
+        formControlName="manufacturerId"
+        class="tui-form__row"
+      >
+        manufacturerId
+        <input tuiTextfieldLegacy />
+        <tui-data-list-wrapper
+          *tuiDataList
+          [items]="manufacturerIds() | tuiFilterByInput"
+        />
+      </tui-combo-box>
+      <tui-error
+        formControlName="manufacturerId"
+        [error]="[] | tuiFieldError | async"
+      ></tui-error>
+    </div>
+    <div class="tui-form__multi-field">
+      <tui-input-number
+        formControlName="manufactureCost"
+        [tuiTextfieldCleaner]="true"
+      >
+        manufactureCost
+        <input tuiTextfieldLegacy />
+      </tui-input-number>
+
+      <tui-error
+        formControlName="manufactureCost"
+        [error]="[] | tuiFieldError | async"
+      ></tui-error>
+    </div>
+  </div>
+  <tui-combo-box
+    formControlName="unitOfMeasure"
+    class="tui-form__row"
+  >
+    unitOfMeasure
+    <input tuiTextfieldLegacy />
+    <tui-data-list-wrapper
+      *tuiDataList
+      [items]="UNITS_OF_MEASURES | tuiFilterByInput"
+    />
+  </tui-combo-box>
+  <tui-error
+    formControlName="unitOfMeasure"
+    [error]="[] | tuiFieldError | async"
+  ></tui-error>
+
+  <tui-input
+    formControlName="name"
+    class="tui-form__row"
+    [tuiTextfieldCleaner]="true"
+  >
+    name
+    <input tuiTextfieldLegacy />
+  </tui-input>
+  <tui-error
+    formControlName="name"
+    [error]="[] | tuiFieldError | async"
+  ></tui-error>
+
+  <div class="tui-form__row tui-form__row_multi-fields">
+    <div class="tui-form__multi-field">
+      <tui-input-number
+        formControlName="price"
+        [tuiTextfieldCleaner]="true"
+      >
+        price
+        <input tuiTextfieldLegacy />
+      </tui-input-number>
+
+      <tui-error
+        formControlName="price"
+        [error]="[] | tuiFieldError | async"
+      ></tui-error>
+    </div>
+    <div class="tui-form__multi-field">
+      <tui-input-number
+        formControlName="rating"
+        [tuiTextfieldCleaner]="true"
+      >
+        rating
+        <input tuiTextfieldLegacy />
+      </tui-input-number>
+
+      <tui-error
+        formControlName="rating"
+        [error]="[] | tuiFieldError | async"
+      ></tui-error>
+    </div>
+  </div>
+
+  <tui-input
+    formControlName="partNumber"
+    class="tui-form__row"
+    [tuiTextfieldCleaner]="true"
+  >
+    partNumber
+    <input tuiTextfieldLegacy />
+  </tui-input>
+  <tui-error
+    formControlName="partNumber"
+    [error]="[] | tuiFieldError | async"
+  ></tui-error>
+
+  @if (!entity()) {
+    <div class="tui-form__row">
+      <label tuiLabel>
+        <input
+          formControlName="adminPermission"
+          size="m"
+          tuiSwitch
+          type="checkbox"
+          [showIcons]="true"
+        />
+        Give admin permission
+      </label>
+    </div>
+  }
+</form>

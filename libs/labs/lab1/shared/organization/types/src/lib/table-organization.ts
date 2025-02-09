@@ -1,6 +1,6 @@
-import type {Entity} from '@is/labs/lab1/shared/types';
+import type {Entity, FormEntity} from '@is/labs/lab1/shared/types';
 
-export interface TableOrganization extends Entity {
+export interface OrganizationData {
   officialAddressId: number;
   postalAddressId: number;
   name: string;
@@ -9,3 +9,10 @@ export interface TableOrganization extends Entity {
   fullName: string;
   rating: number;
 }
+
+export interface TableOrganization extends Entity, OrganizationData {}
+
+export interface FormOrganization
+  extends FormEntity,
+    OrganizationData,
+    Partial<Omit<Entity, 'hasAccess'>> {}

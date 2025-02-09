@@ -1,4 +1,8 @@
 <lab1-entity-table
   [columns]="columns"
+  [entities]="productsSignal()"
   [filterColumns]="filterColumns"
+  (handleAddClick)="onAddClick()"
+  (handleDeleteClick)="onDeleteClick($event)"
+  (handleViewClick)="onViewClick($event)"
 ></lab1-entity-table>

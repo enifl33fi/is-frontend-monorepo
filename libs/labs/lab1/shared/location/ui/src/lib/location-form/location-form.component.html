@@ -1,0 +1,81 @@
+<form
+  class="tui-form"
+  [formGroup]="form"
+>
+  <div class="tui-form__header">Location</div>
+  <div class="tui-form__row tui-form__row_multi-fields">
+    <div class="tui-form__multi-field">
+      <tui-input-number
+        formControlName="x"
+        [tuiTextfieldCleaner]="true"
+      >
+        x
+        <input tuiTextfieldLegacy />
+      </tui-input-number>
+
+      <tui-error
+        formControlName="x"
+        [error]="[] | tuiFieldError | async"
+      ></tui-error>
+    </div>
+
+    <div class="tui-form__multi-field">
+      <tui-input-number
+        formControlName="y"
+        [tuiTextfieldCleaner]="true"
+      >
+        y
+        <input tuiTextfieldLegacy />
+      </tui-input-number>
+
+      <tui-error
+        formControlName="y"
+        [error]="[] | tuiFieldError | async"
+      ></tui-error>
+    </div>
+
+    <div class="tui-form__multi-field">
+      <tui-input-number
+        formControlName="z"
+        [tuiTextfieldCleaner]="true"
+      >
+        z
+        <input tuiTextfieldLegacy />
+      </tui-input-number>
+
+      <tui-error
+        formControlName="z"
+        [error]="[] | tuiFieldError | async"
+      ></tui-error>
+    </div>
+  </div>
+
+  <tui-input
+    formControlName="name"
+    class="tui-form__row"
+    [tuiTextfieldCleaner]="true"
+  >
+    name
+    <input tuiTextfieldLegacy />
+  </tui-input>
+
+  <tui-error
+    formControlName="name"
+    [error]="[] | tuiFieldError | async"
+  ></tui-error>
+
+  @if (!entity()) {
+    <div class="tui-form__row">
+      <label tuiLabel>
+        <input
+          formControlName="adminPermission"
+          size="m"
+          tuiSwitch
+          type="checkbox"
+          [showIcons]="true"
+        />
+        Give admin permission
+      </label>
+    </div>
+  }
+</form>

@@ -1,7 +1,11 @@
 import {HttpClient} from '@angular/common/http';
 import {inject, Injectable, OnDestroy} from '@angular/core';
 import {lab1OrganizationActions} from '@is/labs/lab1/shared/organization/store';
-import {Organization, TableOrganization} from '@is/labs/lab1/shared/organization/types';
+import {
+  FormOrganization,
+  Organization,
+  TableOrganization,
+} from '@is/labs/lab1/shared/organization/types';
 import {WS_URL_TOKEN} from '@is/labs/lab1/shared/utils';
 import {BACK_URL_TOKEN} from '@is/shared/utils';
 import {Store} from '@ngrx/store';
@@ -48,6 +52,30 @@ export class OrganizationService implements OnDestroy {
 
   public onStompMessage() {
     this.store.dispatch(lab1OrganizationActions.fetchOrganizations());
+  }
+
+  public addOrganization(organization: FormOrganization): Observable<Organization> {
+    return this.http.post<Organization>(
+      `${this.backUrlSubject$.getValue()}/organization`,
+      organization,
+    );
+  }
+
+  public updateOrganization(organization: FormOrganization): Observable<Organization> {
+    return this.http.patch<Organization>(
+      `${this.backUrlSubject$.getValue()}/organization/${organization.id}`,
+      organization,
+    );
+  }
+
+  public deleteOrganization(id: number): Observable<void> {
+    return this.http.delete<void>(
+      `${this.backUrlSubject$.getValue()}/organization/${id}`,
+    );
+  }
+
+  public getOwnIds(): Observable<number[]> {
+    return this.http.get<number[]>(`${this.backUrlSubject$.getValue()}/organization/own`);
   }
 
   public ngOnDestroy() {

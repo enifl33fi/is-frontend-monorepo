@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {inject, Injectable, OnDestroy} from '@angular/core';
 import {lab1LocationActions} from '@is/labs/lab1/shared/location/store';
-import {Location} from '@is/labs/lab1/shared/location/types';
+import {FormLocation, Location} from '@is/labs/lab1/shared/location/types';
 import {WS_URL_TOKEN} from '@is/labs/lab1/shared/utils';
 import {BACK_URL_TOKEN} from '@is/shared/utils';
 import {Store} from '@ngrx/store';
@@ -40,6 +40,28 @@ export class LocationService implements OnDestroy {
 
   public onStompMessage() {
     this.store.dispatch(lab1LocationActions.fetchLocations());
+  }
+
+  public addLocation(location: FormLocation): Observable<Location> {
+    return this.http.post<Location>(
+      `${this.backUrlSubject$.getValue()}/location`,
+      location,
+    );
+  }
+
+  public updateLocation(location: FormLocation): Observable<Location> {
+    return this.http.patch<Location>(
+      `${this.backUrlSubject$.getValue()}/location/${location.id}`,
+      location,
+    );
+  }
+
+  public deleteLocation(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.backUrlSubject$.getValue()}/location/${id}`);
+  }
+
+  public getOwnIds(): Observable<number[]> {
+    return this.http.get<number[]>(`${this.backUrlSubject$.getValue()}/location/own`);
   }
 
   public ngOnDestroy() {

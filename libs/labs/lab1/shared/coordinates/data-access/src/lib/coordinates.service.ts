@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {inject, Injectable, OnDestroy} from '@angular/core';
 import {lab1CoordinatesActions} from '@is/labs/lab1/shared/coordinates/store';
-import {Coordinates} from '@is/labs/lab1/shared/coordinates/types';
+import {Coordinates, FormCoordinates} from '@is/labs/lab1/shared/coordinates/types';
 import {WS_URL_TOKEN} from '@is/labs/lab1/shared/utils';
 import {BACK_URL_TOKEN} from '@is/shared/utils';
 import {Store} from '@ngrx/store';
@@ -40,6 +40,28 @@ export class CoordinatesService implements OnDestroy {
     return this.http.get<Coordinates>(
       `${this.backUrlSubject$.getValue()}/coordinates/${id}`,
     );
+  }
+
+  public addCoordinates(coordinates: FormCoordinates): Observable<Coordinates> {
+    return this.http.post<Coordinates>(
+      `${this.backUrlSubject$.getValue()}/coordinates`,
+      coordinates,
+    );
+  }
+
+  public updateCoordinates(coordinates: FormCoordinates): Observable<Coordinates> {
+    return this.http.patch<Coordinates>(
+      `${this.backUrlSubject$.getValue()}/coordinates/${coordinates.id}`,
+      coordinates,
+    );
+  }
+
+  public deleteCoordinates(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.backUrlSubject$.getValue()}/coordinates/${id}`);
+  }
+
+  public getOwnIds(): Observable<number[]> {
+    return this.http.get<number[]>(`${this.backUrlSubject$.getValue()}/coordinates/own`);
   }
 
   public onStompMessage() {

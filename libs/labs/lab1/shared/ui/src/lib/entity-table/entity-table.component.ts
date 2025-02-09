@@ -6,6 +6,7 @@ import {
   inject,
   Input,
   input,
+  output,
   signal,
 } from '@angular/core';
 import {toObservable, toSignal} from '@angular/core/rxjs-interop';
@@ -53,6 +54,10 @@ export class EntityTableComponent {
 
   public readonly sortBySignal = signal('');
   public readonly sortDirectionSignal = signal<-1 | 1>(1);
+
+  public readonly handleAddClick = output();
+  public readonly handleViewClick = output<number>();
+  public readonly handleDeleteClick = output<number>();
 
   public readonly filtersFormSignal = computed(() => {
     const filtersForm: FormGroup<Record<string, FormControl<string | null>>> =

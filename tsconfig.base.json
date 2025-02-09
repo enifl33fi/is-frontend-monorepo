@@ -16,7 +16,6 @@
     "strictNullChecks": true,
     "baseUrl": ".",
     "paths": {
-      "@is/labs/lab1/shared/user/ui": ["libs/labs/lab1/shared/user/ui/src/index.ts"],
       "@is/labs/lab1/address-page/feature": ["libs/labs/lab1/address-page/feature/src/index.ts"],
       "@is/labs/lab1/coordinates-page/feature": ["libs/labs/lab1/coordinates-page/feature/src/index.ts"],
       "@is/labs/lab1/home-page/feature": ["libs/labs/lab1/home-page/feature/src/index.ts"],
@@ -67,6 +66,7 @@
       "@is/labs/lab1/shared/user/effects": ["libs/labs/lab1/shared/user/effects/src/index.ts"],
       "@is/labs/lab1/shared/user/store": ["libs/labs/lab1/shared/user/store/src/index.ts"],
       "@is/labs/lab1/shared/user/types": ["libs/labs/lab1/shared/user/types/src/index.ts"],
+      "@is/labs/lab1/shared/user/ui": ["libs/labs/lab1/shared/user/ui/src/index.ts"],
       "@is/labs/lab1/shared/user/utils": ["libs/labs/lab1/shared/user/utils/src/index.ts"],
       "@is/labs/lab1/shared/utils": ["libs/labs/lab1/shared/utils/src/index.ts"],
       "@is/labs/lab1/shell": ["libs/labs/lab1/shell/src/index.ts"],

@@ -1,3 +1,3 @@
 import {productStore} from './product.reducer';
 
-export const {selectProducts} = productStore;
+export const {selectProducts, selectDialogLoading, selectSelectedProduct} = productStore;

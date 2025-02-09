@@ -1,0 +1,50 @@
+<form
+  class="tui-form"
+  [formGroup]="form"
+>
+  <div class="tui-form__header">Address</div>
+  <tui-input
+    formControlName="zipCode"
+    class="tui-form__row"
+    [tuiTextfieldCleaner]="true"
+  >
+    zipCode
+    <input tuiTextfieldLegacy />
+  </tui-input>
+
+  <tui-error
+    formControlName="zipCode"
+    [error]="[] | tuiFieldError | async"
+  ></tui-error>
+
+  <tui-combo-box
+    formControlName="townId"
+    class="tui-form__row"
+  >
+    townId
+    <input tuiTextfieldLegacy />
+    <tui-data-list-wrapper
+      *tuiDataList
+      [items]="locationIds() | tuiFilterByInput"
+    />
+  </tui-combo-box>
+  <tui-error
+    formControlName="townId"
+    [error]="[] | tuiFieldError | async"
+  ></tui-error>
+
+  @if (!entity()) {
+    <div class="tui-form__row">
+      <label tuiLabel>
+        <input
+          formControlName="adminPermission"
+          size="m"
+          tuiSwitch
+          type="checkbox"
+          [showIcons]="true"
+        />
+        Give admin permission
+      </label>
+    </div>
+  }
+</form>

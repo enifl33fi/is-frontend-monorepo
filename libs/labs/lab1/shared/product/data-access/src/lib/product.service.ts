@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {inject, Injectable, OnDestroy} from '@angular/core';
 import {lab1ProductActions} from '@is/labs/lab1/shared/product/store';
-import {Product, TableProduct} from '@is/labs/lab1/shared/product/types';
+import {FormProduct, Product, TableProduct} from '@is/labs/lab1/shared/product/types';
 import {WS_URL_TOKEN} from '@is/labs/lab1/shared/utils';
 import {BACK_URL_TOKEN} from '@is/shared/utils';
 import {Store} from '@ngrx/store';
@@ -44,6 +44,21 @@ export class ProductService implements OnDestroy {
 
   public onStompMessage() {
     this.store.dispatch(lab1ProductActions.fetchProducts());
+  }
+
+  public addProduct(product: FormProduct): Observable<Product> {
+    return this.http.post<Product>(`${this.backUrlSubject$.getValue()}/product`, product);
+  }
+
+  public updateProduct(product: FormProduct): Observable<Product> {
+    return this.http.patch<Product>(
+      `${this.backUrlSubject$.getValue()}/product/${product.id}`,
+      product,
+    );
+  }
+
+  public deleteProduct(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.backUrlSubject$.getValue()}/product/${id}`);
   }
 
   public ngOnDestroy() {
