@@ -7,6 +7,9 @@ export const initialProductState: ProductState = {
   products: [],
   selectedProduct: null,
   dialogLoading: false,
+  countOwnerLessThan: null,
+  productsByPartNumber: [],
+  ratings: [],
 };
 
 export const productStore = createFeature({
@@ -63,6 +66,27 @@ export const productStore = createFeature({
       (state): ProductState => ({
         ...state,
         selectedProduct: null,
+      }),
+    ),
+    on(
+      lab1ProductActions.ownerCountLessThanFetched,
+      (state, {ownerCount}): ProductState => ({
+        ...state,
+        countOwnerLessThan: ownerCount,
+      }),
+    ),
+    on(
+      lab1ProductActions.productsByPartNumberFetched,
+      (state, {products}): ProductState => ({
+        ...state,
+        productsByPartNumber: products,
+      }),
+    ),
+    on(
+      lab1ProductActions.ratingsFetched,
+      (state, {ratings}): ProductState => ({
+        ...state,
+        ratings,
       }),
     ),
   ),

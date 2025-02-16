@@ -25,5 +25,13 @@ export const lab1ProductActions = createActionGroup({
     deleteProductCompleted: emptyProps(),
     showViewDialog: props<{id: number}>(),
     showAddDialog: emptyProps(),
+    fetchOwnerCountLessThan: props<{ownerId: number}>(),
+    fetchProductsByPartNumber: props<{partNumber: string}>(),
+    fetchRatings: emptyProps(),
+    decreasePrice: props<{manufacturerId: number; percent: number}>(),
+    ownerCountLessThanFetched: props<{ownerCount: number}>(),
+    productsByPartNumberFetched: props<{products: TableProduct[]}>(),
+    ratingsFetched: props<{ratings: number[]}>(),
+    priceDecreased: emptyProps(),
   },
 });

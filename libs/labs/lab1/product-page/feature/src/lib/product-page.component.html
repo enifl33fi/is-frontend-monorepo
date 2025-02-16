@@ -1,1 +1,152 @@
-<lab1-product-table></lab1-product-table>
+<lab1-product-table class="main-table"></lab1-product-table>
+
+<form
+  class="tui-form"
+  [formGroup]="formCount"
+  (ngSubmit)="onSubmitCountForm()"
+>
+  <div class="tui-form__header">Find count where owner less than</div>
+
+  <div class="tui-form__row">
+    <tui-input-number
+      formControlName="ownerId"
+      [tuiTextfieldCleaner]="true"
+    >
+      ownerId
+      <input tuiTextfieldLegacy />
+    </tui-input-number>
+
+    <tui-error
+      formControlName="ownerId"
+      [error]="[] | tuiFieldError | async"
+    ></tui-error>
+  </div>
+
+  <div class="tui-form__buttons">
+    <button
+      appearance="primary"
+      size="m"
+      tuiButton
+      class="tui-form__button"
+    >
+      Find
+    </button>
+  </div>
+</form>
+
+<div class="tui-form__row">
+  @if (ownerLessThanSignal() !== null) {
+    {{ ownerLessThanSignal() }}
+  }
+</div>
+
+<form
+  class="tui-form"
+  [formGroup]="formPartNumber"
+  (ngSubmit)="onSubmitPartNumberForm()"
+>
+  <div class="tui-form__header">Find products by partNumber</div>
+
+  <div class="tui-form__row">
+    <tui-input
+      formControlName="partNumber"
+      class="tui-form__row"
+      [tuiTextfieldCleaner]="true"
+    >
+      partNumber
+      <input tuiTextfieldLegacy />
+    </tui-input>
+    <tui-error
+      formControlName="partNumber"
+      [error]="[] | tuiFieldError | async"
+    ></tui-error>
+  </div>
+
+  <div class="tui-form__buttons">
+    <button
+      appearance="primary"
+      size="m"
+      tuiButton
+      class="tui-form__button"
+    >
+      Find
+    </button>
+  </div>
+</form>
+
+<div class="tui-form__row">
+  @if (productsSignal()) {
+    {{ JSON.stringify(productsSignal()) }}
+  }
+</div>
+
+<div class="tui-form">
+  <div class="tui-form__header">Find distinct ratings</div>
+
+  <div class="tui-form__buttons">
+    <button
+      appearance="primary"
+      size="m"
+      tuiButton
+      class="tui-form__button"
+      (click)="onFindRatingsClick()"
+    >
+      Find
+    </button>
+  </div>
+</div>
+
+<div class="tui-form__row">
+  @if (ratingsSignal()) {
+    {{ JSON.stringify(ratingsSignal()) }}
+  }
+</div>
+
+<form
+  class="tui-form"
+  [formGroup]="formDecreasePrice"
+  (ngSubmit)="onSubmitDecreasePriceForm()"
+>
+  <div class="tui-form__header">Decrease price</div>
+
+  <div class="tui-form__row">
+    <tui-input-number
+      formControlName="manufacturerId"
+      [tuiTextfieldCleaner]="true"
+    >
+      manufacturerId
+      <input tuiTextfieldLegacy />
+    </tui-input-number>
+
+    <tui-error
+      formControlName="manufacturerId"
+      [error]="[] | tuiFieldError | async"
+    ></tui-error>
+  </div>
+
+  <div class="tui-form__row">
+    <tui-input-number
+      formControlName="percent"
+      [tuiTextfieldCleaner]="true"
+    >
+      percent
+      <input tuiTextfieldLegacy />
+    </tui-input-number>
+
+    <tui-error
+      formControlName="percent"
+      [error]="[] | tuiFieldError | async"
+    ></tui-error>
+  </div>
+
+  <div class="tui-form__buttons">
+    <button
+      appearance="primary"
+      size="m"
+      tuiButton
+      class="tui-form__button"
+    >
+      Do
+    </button>
+  </div>
+</form>

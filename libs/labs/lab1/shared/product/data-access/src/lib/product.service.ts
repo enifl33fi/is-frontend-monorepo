@@ -61,6 +61,31 @@ export class ProductService implements OnDestroy {
     return this.http.delete<void>(`${this.backUrlSubject$.getValue()}/product/${id}`);
   }
 
+  public countOwnerLessThan(ownerId: number): Observable<number> {
+    return this.http.get<number>(
+      `${this.backUrlSubject$.getValue()}/product/count_owner_less_than/${ownerId}`,
+    );
+  }
+
+  public findByPartNumber(partNumber: string): Observable<TableProduct[]> {
+    return this.http
+      .get<
+        Product[]
+      >(`${this.backUrlSubject$.getValue()}/product/find_by_part_number?partNumber=${partNumber}`)
+      .pipe(map((products) => products.map(convertProductToTableProduct)));
+  }
+
+  public findRatings(): Observable<number[]> {
+    return this.http.get<number[]>(`${this.backUrlSubject$.getValue()}/product/ratings`);
+  }
+
+  public decreasePrice(manufactureId: number, percent: number): Observable<void> {
+    return this.http.patch<void>(
+      `${this.backUrlSubject$.getValue()}/product/decrease-price/${manufactureId}`,
+      percent,
+    );
+  }
+
   public ngOnDestroy() {
     this.client?.deactivate();
   }

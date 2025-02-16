@@ -4,4 +4,7 @@ export interface ProductState {
   products: TableProduct[];
   selectedProduct: Product | null;
   dialogLoading: boolean;
+  countOwnerLessThan: number | null;
+  productsByPartNumber: TableProduct[];
+  ratings: number[];
 }
