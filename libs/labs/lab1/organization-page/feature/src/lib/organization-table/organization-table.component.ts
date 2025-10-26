@@ -21,15 +21,14 @@ export class OrganizationTableComponent {
   public columns: string[] = [
     'id',
     'officialAddressId',
-    'postalAddressId',
     'name',
     'annualTurnover',
     'employeesCount',
-    'fullName',
+    'type',
     'rating',
   ];
 
-  public filterColumn: string[] = ['name', 'fullName'];
+  public filterColumn: string[] = ['name', 'type'];
 
   public readonly organizationsSignal = this.store.selectSignal(
     selectOrganizations,

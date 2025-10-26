@@ -15,8 +15,7 @@ import {Store} from '@ngrx/store';
 export class LocationTableComponent {
   private readonly store = inject(Store);
 
-  public readonly columns: string[] = ['id', 'x', 'y', 'z', 'name'];
-  public readonly filterColumns: string[] = ['name'];
+  public readonly columns: string[] = ['id', 'x', 'y', 'z'];
 
   public readonly locationsSignal = this.store.selectSignal(
     selectLocations,

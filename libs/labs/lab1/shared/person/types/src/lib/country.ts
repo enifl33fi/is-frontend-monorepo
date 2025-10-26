@@ -1,3 +1,3 @@
-export const COUNTRIES = ['FRANCE', 'INDIA', 'ITALY', 'SOUTH_KOREA'] as const;
+export const COUNTRIES = ['VATICAN', 'THAILAND', 'JAPAN'] as const;
 
 export type Country = (typeof COUNTRIES)[number];

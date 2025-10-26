@@ -4,7 +4,6 @@ export interface LocationData {
   x: number;
   y: number;
   z: number;
-  name: string;
 }
 
 export interface Location extends Entity, LocationData {}

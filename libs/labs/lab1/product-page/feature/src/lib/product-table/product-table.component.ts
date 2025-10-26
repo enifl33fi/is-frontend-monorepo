@@ -25,10 +25,10 @@ export class ProductTableComponent {
     'price',
     'manufactureCost',
     'rating',
-    'partNumber',
+    'creationDate',
   ];
 
-  public filterColumns: string[] = ['name', 'unitOfMeasure', 'partNumber'];
+  public filterColumns: string[] = ['name', 'unitOfMeasure'];
 
   public readonly productsSignal = this.store.selectSignal(
     selectProducts,

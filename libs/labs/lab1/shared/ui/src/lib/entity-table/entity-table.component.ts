@@ -1,4 +1,3 @@
-import {AsyncPipe, NgForOf} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -12,7 +11,12 @@ import {
 import {toObservable, toSignal} from '@angular/core/rxjs-interop';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {TableEntity} from '@is/labs/lab1/shared/types';
-import {fullFilterFn, paginateFn, sortFn} from '@is/labs/lab1/shared/utils';
+import {
+  fullFilterFn,
+  objectCompareFn,
+  paginateFn,
+  sortFn,
+} from '@is/labs/lab1/shared/utils';
 import {
   TuiTable,
   TuiTablePagination,
@@ -20,14 +24,12 @@ import {
 } from '@taiga-ui/addon-table';
 import {TuiButton, TuiHintDirective, TuiLabel, TuiTextfield} from '@taiga-ui/core';
 import {TuiAccordion} from '@taiga-ui/kit';
-import {debounceTime, map, startWith, switchMap} from 'rxjs';
+import {debounceTime, distinctUntilChanged, map, startWith, switchMap} from 'rxjs';
 
 @Component({
   standalone: true,
   selector: 'lab1-entity-table',
   imports: [
-    AsyncPipe,
-    NgForOf,
     ReactiveFormsModule,
     TuiAccordion,
     TuiButton,
@@ -75,9 +77,10 @@ export class EntityTableComponent {
     toObservable(this.filtersFormSignal).pipe(
       switchMap((form) =>
         form.valueChanges.pipe(
+          startWith(form.getRawValue()),
+          distinctUntilChanged(objectCompareFn),
           debounceTime(300),
           map(() => form.getRawValue()),
-          startWith(form.getRawValue()),
         ),
       ),
     ),

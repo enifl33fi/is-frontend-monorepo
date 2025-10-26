@@ -18,7 +18,7 @@ import {
   UNITS_OF_MEASURES,
 } from '@is/labs/lab1/shared/product/types';
 import {notBlankValidator} from '@is/shared/utils';
-import {TuiError, TuiLabel} from '@taiga-ui/core';
+import {TuiError, TuiLabel, TuiNumberFormat} from '@taiga-ui/core';
 import {
   TuiDataListWrapper,
   TuiDataListWrapperComponent,
@@ -50,6 +50,7 @@ import {tap} from 'rxjs';
     TuiInputModule,
     TuiInputNumberModule,
     TuiLabel,
+    TuiNumberFormat,
     TuiSwitch,
     TuiTextfieldControllerModule,
   ],
@@ -73,8 +74,8 @@ export class ProductFormComponent implements OnInit {
 
   public readonly form = this.fb.group({
     coordinatesId: this.fb.control<number | null>(null, [Validators.required]),
-    manufacturerId: this.fb.control<number | null>(null, [Validators.required]),
-    ownerId: this.fb.control<number | null>(null, [Validators.required]),
+    manufacturerId: this.fb.control<number | null>(null),
+    ownerId: this.fb.control<number | null>(null),
     name: this.fb.control<string>('', [notBlankValidator()]),
     unitOfMeasure: this.fb.control<UnitOfMeasure | null>(null, [Validators.required]),
     price: this.fb.control<number | null>(null, [Validators.required, Validators.min(0)]),
@@ -82,11 +83,6 @@ export class ProductFormComponent implements OnInit {
     rating: this.fb.control<number | null>(null, [
       Validators.required,
       Validators.min(0),
-    ]),
-    partNumber: this.fb.control<string>('', [
-      Validators.required,
-      Validators.minLength(28),
-      Validators.maxLength(46),
     ]),
     adminPermission: this.fb.control<boolean | null>(null),
   });
@@ -98,14 +94,13 @@ export class ProductFormComponent implements OnInit {
       if (entityValue) {
         this.form.patchValue({
           coordinatesId: entityValue.coordinates.id,
-          manufacturerId: entityValue.manufacturer.id,
-          ownerId: entityValue.owner.id,
+          manufacturerId: entityValue.manufacturer?.id ?? null,
+          ownerId: entityValue.owner?.id ?? null,
           name: entityValue.name,
           unitOfMeasure: entityValue.unitOfMeasure,
           price: entityValue.price,
           manufactureCost: entityValue.manufactureCost,
           rating: entityValue.rating,
-          partNumber: entityValue.partNumber,
         });
       }
     });
@@ -143,21 +138,19 @@ export class ProductFormComponent implements OnInit {
         price,
         manufactureCost,
         rating,
-        partNumber,
         adminPermission,
       } = formValue;
 
       this.handleForm.emit({
         id: this.entity()?.id,
         coordinatesId: coordinatesId ?? 0,
-        manufacturerId: manufacturerId ?? 0,
-        ownerId: ownerId ?? 0,
+        manufacturerId: manufacturerId ?? null,
+        ownerId: ownerId ?? null,
         name: name ?? '',
-        unitOfMeasure: unitOfMeasure ?? 'METERS',
+        unitOfMeasure: unitOfMeasure ?? 'CENTIMETERS',
         price: price ?? 0,
         manufactureCost: manufactureCost ?? 0,
         rating: rating ?? 0,
-        partNumber: partNumber ?? '',
         adminPermission: adminPermission ?? undefined,
       });
     }

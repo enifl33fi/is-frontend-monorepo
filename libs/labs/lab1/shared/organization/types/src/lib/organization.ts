@@ -1,12 +1,16 @@
 import type {Address} from '@is/labs/lab1/shared/address/types';
 import type {Entity} from '@is/labs/lab1/shared/types';
 
-export interface Organization extends Entity {
-  officialAddress: Address;
-  postalAddress: Address;
+import type {OrganizationType} from './organization-type';
+
+export interface OrganizationBase {
   name: string;
-  annualTurnover: number;
+  annualTurnover: number | null;
   employeesCount: number;
-  fullName: string;
   rating: number;
+  type: OrganizationType;
+}
+
+export interface Organization extends Entity, OrganizationBase {
+  officialAddress: Address;
 }

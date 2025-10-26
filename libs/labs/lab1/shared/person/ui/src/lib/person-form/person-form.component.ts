@@ -20,7 +20,6 @@ import {
   Person,
 } from '@is/labs/lab1/shared/person/types';
 import {notBlankValidator} from '@is/shared/utils';
-import {TuiDay} from '@taiga-ui/cdk';
 import {TuiError, TuiLabel} from '@taiga-ui/core';
 import {
   TuiDataListWrapper,
@@ -75,11 +74,11 @@ export class PersonFormComponent implements OnInit {
   public readonly handleForm = output<FormPerson>();
 
   public readonly form = this.fb.group({
-    locationId: this.fb.control<number | null>(null, [Validators.required]),
+    locationId: this.fb.control<number | null>(null),
     name: this.fb.control<string>('', [notBlankValidator()]),
     eyeColor: this.fb.control<Color | null>(null, [Validators.required]),
-    hairColor: this.fb.control<Color | null>(null, [Validators.required]),
-    birthday: this.fb.control<TuiDay | null>(null, [Validators.required]),
+    hairColor: this.fb.control<Color | null>(null),
+    weight: this.fb.control<number | null>(null, [Validators.min(0)]),
     nationality: this.fb.control<Country | null>(null, [Validators.required]),
     adminPermission: this.fb.control<boolean | null>(null),
   });
@@ -90,11 +89,11 @@ export class PersonFormComponent implements OnInit {
 
       if (entityValue) {
         this.form.patchValue({
-          locationId: entityValue.location.id,
+          locationId: entityValue.location?.id ?? null,
           name: entityValue.name,
           eyeColor: entityValue.eyeColor,
           hairColor: entityValue.hairColor,
-          birthday: TuiDay.fromLocalNativeDate(new Date(entityValue.birthday)),
+          weight: entityValue.weight,
           nationality: entityValue.nationality,
         });
       }
@@ -129,7 +128,7 @@ export class PersonFormComponent implements OnInit {
         name,
         eyeColor,
         hairColor,
-        birthday,
+        weight,
         nationality,
         adminPermission,
       } = formValue;
@@ -138,11 +137,10 @@ export class PersonFormComponent implements OnInit {
         id: this.entity()?.id,
         locationId: locationId ?? 0,
         name: name ?? '',
-        eyeColor: eyeColor ?? 'GREEN',
-        hairColor: hairColor ?? 'GREEN',
-        birthday:
-          birthday?.toLocalNativeDate()?.toISOString() ?? new Date().toISOString(),
-        nationality: nationality ?? 'SOUTH_KOREA',
+        eyeColor: eyeColor ?? 'BLACK',
+        hairColor: hairColor ?? null,
+        weight: weight ?? null,
+        nationality: nationality ?? 'VATICAN',
         adminPermission: adminPermission ?? undefined,
       });
     }

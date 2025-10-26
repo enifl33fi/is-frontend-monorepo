@@ -21,7 +21,7 @@ export class PersonTableComponent {
     'name',
     'eyeColor',
     'hairColor',
-    'birthday',
+    'weight',
     'nationality',
   ];
 

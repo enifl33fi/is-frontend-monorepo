@@ -45,8 +45,8 @@ export class CoordinatesFormComponent implements OnInit {
   public readonly handleForm = output<FormCoordinates>();
 
   public readonly form = this.fb.group({
-    x: this.fb.control<number | null>(null, [Validators.required, Validators.min(-372)]),
-    y: this.fb.control<number | null>(null, [Validators.required]),
+    x: this.fb.control<number | null>(null, [Validators.required, Validators.min(-444)]),
+    y: this.fb.control<number | null>(null, [Validators.required, Validators.min(-356)]),
     adminPermission: this.fb.control<boolean | null>(null),
   });
 

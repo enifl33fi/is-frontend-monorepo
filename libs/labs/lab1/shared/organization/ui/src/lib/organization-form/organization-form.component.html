@@ -3,36 +3,19 @@
   [formGroup]="form"
 >
   <div class="tui-form__header">Organization</div>
-  <div class="tui-form__row tui-form__row_multi-fields">
-    <div class="tui-form__multi-field">
-      <tui-input
-        formControlName="name"
-        [tuiTextfieldCleaner]="true"
-      >
-        name
-        <input tuiTextfieldLegacy />
-      </tui-input>
+  <tui-input
+    formControlName="name"
+    class="tui-form__row"
+    [tuiTextfieldCleaner]="true"
+  >
+    name
+    <input tuiTextfieldLegacy />
+  </tui-input>
 
-      <tui-error
-        formControlName="name"
-        [error]="[] | tuiFieldError | async"
-      ></tui-error>
-    </div>
-    <div class="tui-form__multi-field">
-      <tui-input
-        formControlName="fullName"
-        [tuiTextfieldCleaner]="true"
-      >
-        fullName
-        <input tuiTextfieldLegacy />
-      </tui-input>
-
-      <tui-error
-        formControlName="fullName"
-        [error]="[] | tuiFieldError | async"
-      ></tui-error>
-    </div>
-  </div>
+  <tui-error
+    formControlName="name"
+    [error]="[] | tuiFieldError | async"
+  ></tui-error>
 
   <div class="tui-form__row tui-form__row_multi-fields">
     <div class="tui-form__multi-field">
@@ -50,16 +33,16 @@
       ></tui-error>
     </div>
     <div class="tui-form__multi-field">
-      <tui-combo-box formControlName="postalAddressId">
-        postalAddressId
+      <tui-combo-box formControlName="type">
+        type
         <input tuiTextfieldLegacy />
         <tui-data-list-wrapper
           *tuiDataList
-          [items]="addressIds() | tuiFilterByInput"
+          [items]="ORGANIZATION_TYPES | tuiFilterByInput"
         />
       </tui-combo-box>
       <tui-error
-        formControlName="postalAddressId"
+        formControlName="type"
         [error]="[] | tuiFieldError | async"
       ></tui-error>
     </div>

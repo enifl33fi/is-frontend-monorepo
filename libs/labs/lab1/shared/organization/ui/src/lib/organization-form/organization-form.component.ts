@@ -11,7 +11,12 @@ import {
 } from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
-import {FormOrganization, Organization} from '@is/labs/lab1/shared/organization/types';
+import {
+  FormOrganization,
+  Organization,
+  ORGANIZATION_TYPES,
+  OrganizationType,
+} from '@is/labs/lab1/shared/organization/types';
 import {notBlankValidator} from '@is/shared/utils';
 import {TuiError, TuiLabel, TuiNumberFormat} from '@taiga-ui/core';
 import {
@@ -56,6 +61,8 @@ export class OrganizationFormComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
 
+  protected readonly ORGANIZATION_TYPES = ORGANIZATION_TYPES;
+
   public readonly locked = input(false);
   public readonly entity = input<Organization | null>(null);
   public readonly addressIds = input<number[]>([]);
@@ -64,17 +71,13 @@ export class OrganizationFormComponent implements OnInit {
 
   public readonly form = this.fb.group({
     officialAddressId: this.fb.control<number | null>(null, [Validators.required]),
-    postalAddressId: this.fb.control<number | null>(null, [Validators.required]),
     name: this.fb.control<string>('', [notBlankValidator()]),
-    annualTurnover: this.fb.control<number | null>(null, [
-      Validators.required,
-      Validators.min(0),
-    ]),
+    annualTurnover: this.fb.control<number | null>(null, [Validators.min(0)]),
     employeesCount: this.fb.control<number | null>(null, [
       Validators.required,
       Validators.min(0),
     ]),
-    fullName: this.fb.control<string>('', [Validators.required]),
+    type: this.fb.control<OrganizationType | null>(null, [Validators.required]),
     rating: this.fb.control<number | null>(null, [
       Validators.required,
       Validators.min(0),
@@ -89,11 +92,10 @@ export class OrganizationFormComponent implements OnInit {
       if (entityValue) {
         this.form.patchValue({
           officialAddressId: entityValue.officialAddress.id,
-          postalAddressId: entityValue.postalAddress.id,
           name: entityValue.name,
           annualTurnover: entityValue.annualTurnover,
           employeesCount: entityValue.employeesCount,
-          fullName: entityValue.fullName,
+          type: entityValue.type,
           rating: entityValue.rating,
         });
       }
@@ -125,11 +127,10 @@ export class OrganizationFormComponent implements OnInit {
     if (this.form.valid) {
       const {
         rating,
-        fullName,
+        type,
         employeesCount,
         annualTurnover,
         name,
-        postalAddressId,
         officialAddressId,
         adminPermission,
       } = formValue;
@@ -137,11 +138,10 @@ export class OrganizationFormComponent implements OnInit {
       this.handleForm.emit({
         id: this.entity()?.id,
         rating: rating ?? 0,
-        fullName: fullName ?? '',
+        type: type ?? '',
         employeesCount: employeesCount ?? 0,
-        annualTurnover: annualTurnover ?? 0,
+        annualTurnover: annualTurnover ?? null,
         name: name ?? '',
-        postalAddressId: postalAddressId ?? 0,
         officialAddressId: officialAddressId ?? 0,
         adminPermission: adminPermission ?? undefined,
       });

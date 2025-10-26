@@ -12,7 +12,7 @@ import {
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {FormLocation, Location} from '@is/labs/lab1/shared/location/types';
-import {TuiError, TuiLabel} from '@taiga-ui/core';
+import {TuiError, TuiLabel, TuiNumberFormat} from '@taiga-ui/core';
 import {TuiFieldErrorPipe, TuiSwitch} from '@taiga-ui/kit';
 import {
   TuiInputModule,
@@ -32,6 +32,7 @@ import {tap} from 'rxjs';
     TuiInputModule,
     TuiInputNumberModule,
     TuiLabel,
+    TuiNumberFormat,
     TuiSwitch,
     TuiTextfieldControllerModule,
   ],
@@ -52,7 +53,6 @@ export class LocationFormComponent implements OnInit {
     x: this.fb.control<number | null>(null, [Validators.required]),
     y: this.fb.control<number | null>(null, [Validators.required]),
     z: this.fb.control<number | null>(null, [Validators.required]),
-    name: this.fb.control<string>('', [Validators.required, Validators.maxLength(779)]),
     adminPermission: this.fb.control<boolean | null>(null),
   });
 
@@ -65,7 +65,6 @@ export class LocationFormComponent implements OnInit {
           x: entityValue.x,
           y: entityValue.y,
           z: entityValue.z,
-          name: entityValue.name,
         });
       }
     });
@@ -94,14 +93,13 @@ export class LocationFormComponent implements OnInit {
 
   private emitForm(formValue: typeof this.form.value) {
     if (this.form.valid) {
-      const {x, y, z, name, adminPermission} = formValue;
+      const {x, y, z, adminPermission} = formValue;
 
       this.handleForm.emit({
         id: this.entity()?.id,
         x: x ?? 0,
         y: y ?? 0,
         z: z ?? 0,
-        name: name ?? '',
         adminPermission: adminPermission ?? undefined,
       });
     }

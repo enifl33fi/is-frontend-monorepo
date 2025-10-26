@@ -102,6 +102,7 @@
     <div class="tui-form__multi-field">
       <tui-input-number
         formControlName="price"
+        [tuiNumberFormat]="{precision: 4, decimalMode: 'not-zero'}"
         [tuiTextfieldCleaner]="true"
       >
         price
@@ -128,19 +129,6 @@
       ></tui-error>
     </div>
   </div>
-
-  <tui-input
-    formControlName="partNumber"
-    class="tui-form__row"
-    [tuiTextfieldCleaner]="true"
-  >
-    partNumber
-    <input tuiTextfieldLegacy />
-  </tui-input>
-  <tui-error
-    formControlName="partNumber"
-    [error]="[] | tuiFieldError | async"
-  ></tui-error>
 
   @if (!entity()) {
     <div class="tui-form__row">

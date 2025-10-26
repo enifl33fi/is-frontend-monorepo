@@ -1,13 +1,9 @@
 import type {Entity, FormEntity} from '@is/labs/lab1/shared/types';
 
-export interface OrganizationData {
+import type {OrganizationBase} from './organization';
+
+export interface OrganizationData extends OrganizationBase {
   officialAddressId: number;
-  postalAddressId: number;
-  name: string;
-  annualTurnover: number;
-  employeesCount: number;
-  fullName: string;
-  rating: number;
 }
 
 export interface TableOrganization extends Entity, OrganizationData {}

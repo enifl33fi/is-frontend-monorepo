@@ -1,15 +1,9 @@
 import type {Entity, FormEntity} from '@is/labs/lab1/shared/types';
 
-import type {Color} from './color';
-import type {Country} from './country';
+import type {PersonBase} from './person';
 
-export interface PersonData {
-  locationId: number;
-  name: string;
-  eyeColor: Color;
-  hairColor: Color;
-  birthday: string;
-  nationality: Country;
+export interface PersonData extends PersonBase {
+  locationId: number | null;
 }
 
 export interface TablePerson extends Entity, PersonData {}

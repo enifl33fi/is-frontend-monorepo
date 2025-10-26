@@ -63,17 +63,17 @@
     </div>
   </div>
 
-  <tui-input-date
-    formControlName="birthday"
+  <tui-input-number
+    formControlName="weight"
     class="tui-form__row"
     [tuiTextfieldCleaner]="true"
   >
-    birthday
+    weight
     <input tuiTextfieldLegacy />
-  </tui-input-date>
+  </tui-input-number>
 
   <tui-error
-    formControlName="birthday"
+    formControlName="weight"
     [error]="[] | tuiFieldError | async"
   ></tui-error>
 

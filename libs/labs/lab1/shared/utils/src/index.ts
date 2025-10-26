@@ -1,4 +1,5 @@
 export * from './lib/helpers/full-filter.fn';
+export * from './lib/helpers/object-compare.fn';
 export * from './lib/helpers/paginate.fn';
 export * from './lib/helpers/prefix-filter.fn';
 export * from './lib/helpers/sort.fn';

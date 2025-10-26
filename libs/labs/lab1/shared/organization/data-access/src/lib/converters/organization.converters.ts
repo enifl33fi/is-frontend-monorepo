@@ -10,11 +10,11 @@ export function convertOrganizationToOrganizationTable(
     id: organization.id,
     hasAccess: organization.hasAccess,
     officialAddressId: organization.officialAddress.id,
-    postalAddressId: organization.postalAddress.id,
     name: organization.name,
     annualTurnover: organization.annualTurnover,
     employeesCount: organization.employeesCount,
-    fullName: organization.fullName,
+    type: organization.type,
     rating: organization.rating,
+    creationDate: organization.creationDate,
   };
 }

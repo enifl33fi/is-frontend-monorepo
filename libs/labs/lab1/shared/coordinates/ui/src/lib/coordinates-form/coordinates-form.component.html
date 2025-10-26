@@ -7,6 +7,7 @@
     <div class="tui-form__multi-field">
       <tui-input-number
         formControlName="x"
+        [tuiNumberFormat]="{precision: 4, decimalMode: 'not-zero'}"
         [tuiTextfieldCleaner]="true"
       >
         x

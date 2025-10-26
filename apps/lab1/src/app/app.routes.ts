@@ -1,4 +1,5 @@
 import type {Route} from '@angular/router';
+import {authGuard, protectedGuard} from '@is/labs/lab1/shared/user/utils';
 
 export const appRoutes: Route[] = [
   {
@@ -9,6 +10,7 @@ export const appRoutes: Route[] = [
       {
         path: '',
         pathMatch: 'full',
+        canActivate: [authGuard],
         loadComponent: async () =>
           import('@is/labs/lab1/welcome-page/feature').then(
             (m) => m.WelcomePageComponent,
@@ -17,18 +19,21 @@ export const appRoutes: Route[] = [
       {
         path: 'signup',
         pathMatch: 'full',
+        canActivate: [authGuard],
         loadComponent: async () =>
           import('@is/labs/lab1/signup-page/feature').then((m) => m.SignupPageComponent),
       },
       {
         path: 'signin',
         pathMatch: 'full',
+        canActivate: [authGuard],
         loadComponent: async () =>
           import('@is/labs/lab1/signin-page/feature').then((m) => m.SigninPageComponent),
       },
 
       {
         path: 'home',
+        canActivate: [protectedGuard],
         loadComponent: async () =>
           import('@is/labs/lab1/home-page/feature').then((m) => m.HomePageComponent),
         children: [

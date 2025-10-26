@@ -5,14 +5,16 @@ import type {Entity} from '@is/labs/lab1/shared/types';
 
 import type {UnitOfMeasure} from './unit-of-measure';
 
-export interface Product extends Entity {
-  coordinates: Coordinates;
-  manufacturer: Organization;
-  owner: Person;
+export interface ProductBase {
   name: string;
   unitOfMeasure: UnitOfMeasure;
   price: number;
   manufactureCost: number;
   rating: number;
-  partNumber: string;
+}
+
+export interface Product extends Entity, ProductBase {
+  coordinates: Coordinates;
+  manufacturer: Organization | null;
+  owner: Person | null;
 }

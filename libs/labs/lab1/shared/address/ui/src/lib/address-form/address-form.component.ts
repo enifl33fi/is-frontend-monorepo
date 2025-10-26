@@ -62,7 +62,7 @@ export class AddressFormComponent implements OnInit {
   public readonly handleForm = output<FormAddress>();
 
   public readonly form = this.fb.group({
-    townId: this.fb.control<number | null>(null, [Validators.required]),
+    townId: this.fb.control<number | null>(null),
     zipCode: this.fb.control<string>('', [Validators.required]),
     adminPermission: this.fb.control<boolean | null>(null),
   });
@@ -74,7 +74,7 @@ export class AddressFormComponent implements OnInit {
       if (entityValue) {
         this.form.patchValue({
           zipCode: entityValue.zipCode,
-          townId: entityValue.town.id,
+          townId: entityValue.town?.id ?? null,
         });
       }
     });
@@ -108,7 +108,7 @@ export class AddressFormComponent implements OnInit {
       this.handleForm.emit({
         id: this.entity()?.id,
         zipCode: zipCode ?? '',
-        townId: townId ?? 0,
+        townId: townId ?? null,
         adminPermission: adminPermission ?? undefined,
       });
     }

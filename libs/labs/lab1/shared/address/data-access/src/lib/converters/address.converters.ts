@@ -5,6 +5,7 @@ export function convertAddressToTableAddress(address: Address): TableAddress {
     id: address.id,
     hasAccess: address.hasAccess,
     zipCode: address.zipCode,
-    townId: address.town.id,
+    townId: address.town?.id ?? null,
+    creationDate: address.creationDate,
   };
 }

@@ -5,13 +5,13 @@ export function convertProductToTableProduct(product: Product): TableProduct {
     id: product.id,
     hasAccess: product.hasAccess,
     coordinatesId: product.coordinates.id,
-    manufacturerId: product.manufacturer.id,
-    ownerId: product.owner.id,
+    manufacturerId: product.manufacturer?.id ?? null,
+    ownerId: product.owner?.id ?? null,
     name: product.name,
     unitOfMeasure: product.unitOfMeasure,
     price: product.price,
     manufactureCost: product.manufactureCost,
     rating: product.rating,
-    partNumber: product.partNumber,
+    creationDate: product.creationDate,
   };
 }
