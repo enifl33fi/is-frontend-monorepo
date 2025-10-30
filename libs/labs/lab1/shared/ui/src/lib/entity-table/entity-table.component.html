@@ -28,10 +28,10 @@
     tuiTable
     class="table"
     [columns]="actualColumns()"
-    [direction]="sortDirectionSignal()"
-    [tuiSortBy]="sortBySignal()"
-    (directionChange)="sortDirectionSignal.set($event)"
-    (tuiSortByChange)="sortBySignal.set($event + '')"
+    [direction]="sortDirection()"
+    [tuiSortBy]="sortBy()"
+    (directionChange)="sortDirection.set($event)"
+    (tuiSortByChange)="sortBy.set($event + '')"
   >
     <thead>
       <tr tuiThGroup>
@@ -54,12 +54,12 @@
       </tr>
     </thead>
 
-    @let sortedEntities = actualDataSignal() | tuiTableSort;
+    @let entitiesValue = entities();
     <tbody
       tuiTbody
-      [data]="sortedEntities"
+      [data]="entitiesValue"
     >
-      @for (entity of sortedEntities; track entity) {
+      @for (entity of entitiesValue; track entity.id) {
         <tr tuiTr>
           @for (column of columns(); track column) {
             <td
@@ -117,8 +117,8 @@
       <div>
         <tui-table-pagination
           [page]="page()"
-          [size]="sizeSignal()"
-          [total]="entities().length"
+          [size]="size()"
+          [total]="total()"
           (paginationChange)="onPaginationChange($event)"
         ></tui-table-pagination>
       </div>

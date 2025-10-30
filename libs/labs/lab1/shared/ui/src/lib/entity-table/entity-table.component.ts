@@ -2,21 +2,19 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
+  effect,
   inject,
-  Input,
   input,
+  model,
+  OnInit,
   output,
   signal,
 } from '@angular/core';
-import {toObservable, toSignal} from '@angular/core/rxjs-interop';
+import {takeUntilDestroyed, toObservable} from '@angular/core/rxjs-interop';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
-import {TableEntity} from '@is/labs/lab1/shared/types';
-import {
-  fullFilterFn,
-  objectCompareFn,
-  paginateFn,
-  sortFn,
-} from '@is/labs/lab1/shared/utils';
+import {EntityQueryParams, TableEntity} from '@is/labs/lab1/shared/types';
+import {objectCompareFn} from '@is/labs/lab1/shared/utils';
 import {
   TuiTable,
   TuiTablePagination,
@@ -24,7 +22,18 @@ import {
 } from '@taiga-ui/addon-table';
 import {TuiButton, TuiHintDirective, TuiLabel, TuiTextfield} from '@taiga-ui/core';
 import {TuiAccordion} from '@taiga-ui/kit';
-import {debounceTime, distinctUntilChanged, map, startWith, switchMap} from 'rxjs';
+import {
+  asyncScheduler,
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  map,
+  observeOn,
+  startWith,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs';
 
 @Component({
   standalone: true,
@@ -43,23 +52,30 @@ import {debounceTime, distinctUntilChanged, map, startWith, switchMap} from 'rxj
   styleUrls: ['./entity-table.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EntityTableComponent {
+export class EntityTableComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
+  private readonly destroyRef = inject(DestroyRef);
 
-  protected readonly page = signal(0);
+  public readonly page = model(0);
+  public readonly size = model(10);
+  public readonly filtersValues = model<Record<string, string | null>>({});
+  public readonly sortBy = model('');
+  public readonly sortDirection = model<-1 | 1>(1);
+
+  public readonly total = input(0);
 
   public readonly entities = input<TableEntity[]>([]);
   public readonly filterColumns = input<string[]>([]);
   public readonly columns = input<string[]>([]);
   public readonly actionColumnName = input('actions');
-  public readonly sizeSignal = signal(10);
 
-  public readonly sortBySignal = signal('');
-  public readonly sortDirectionSignal = signal<-1 | 1>(1);
+  public readonly initialized = signal(false);
 
   public readonly handleAddClick = output();
   public readonly handleViewClick = output<number>();
   public readonly handleDeleteClick = output<number>();
+
+  public readonly queryChanged = output<EntityQueryParams>();
 
   public readonly filtersFormSignal = computed(() => {
     const filtersForm: FormGroup<Record<string, FormControl<string | null>>> =
@@ -73,19 +89,8 @@ export class EntityTableComponent {
     return filtersForm;
   });
 
-  public readonly filtersValuesSignal = toSignal(
-    toObservable(this.filtersFormSignal).pipe(
-      switchMap((form) =>
-        form.valueChanges.pipe(
-          startWith(form.getRawValue()),
-          distinctUntilChanged(objectCompareFn),
-          debounceTime(300),
-          map(() => form.getRawValue()),
-        ),
-      ),
-    ),
-    {initialValue: this.filtersFormSignal().getRawValue()},
-  );
+  public readonly filtersForm$ = toObservable(this.filtersFormSignal);
+  public readonly filtersValues$ = toObservable(this.filtersValues);
 
   public readonly actualColumns = computed(() => {
     const columns = this.columns();
@@ -104,34 +109,60 @@ export class EntityTableComponent {
     return !!filterColumns.length;
   });
 
-  public readonly actualDataSignal = computed(() => {
-    const entities = this.entities();
-    const filtersValues = this.filtersValuesSignal();
-    const sortBy = this.sortBySignal();
-    const sortDirection = this.sortDirectionSignal();
-    const page = this.page();
-    const size = this.sizeSignal();
+  constructor() {
+    effect(() => {
+      const initialized = this.initialized();
 
-    return paginateFn(
-      entities
-        .filter((entity) =>
-          Object.keys(filtersValues).every((key) =>
-            fullFilterFn(entity[key], filtersValues[key]),
-          ),
-        )
-        .sort(sortFn(sortBy, sortDirection)),
-      size,
-      page,
-    );
-  });
+      if (initialized) {
+        const filtersValues = this.filtersValues();
+        const sortBy = this.sortBy();
+        const sortDirection = this.sortDirection();
+        const page = this.page();
+        const size = this.size();
 
-  @Input()
-  public set size(size: number) {
-    this.sizeSignal.set(size);
+        this.queryChanged.emit({
+          filtersValues,
+          sortBy,
+          sortDirection,
+          page,
+          size,
+        });
+      }
+    });
   }
 
   public onPaginationChange({page, size}: TuiTablePaginationEvent) {
     this.page.set(page);
-    this.sizeSignal.set(size);
+    this.size.set(size);
+  }
+
+  public ngOnInit() {
+    this.filtersValues$
+      .pipe(
+        filter((data) => Object.keys(data).length > 0),
+        tap((data) => this.filtersFormSignal().setValue(data)),
+        take(1),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe();
+
+    this.filtersForm$
+      .pipe(
+        observeOn(asyncScheduler),
+        switchMap((form) =>
+          form.valueChanges.pipe(
+            startWith(form.getRawValue()),
+            distinctUntilChanged(objectCompareFn),
+            debounceTime(500),
+            map(() => form.getRawValue()),
+            tap((data) => {
+              this.filtersValues.set(data);
+              this.initialized.set(true);
+            }),
+            takeUntilDestroyed(this.destroyRef),
+          ),
+        ),
+      )
+      .subscribe();
   }
 }

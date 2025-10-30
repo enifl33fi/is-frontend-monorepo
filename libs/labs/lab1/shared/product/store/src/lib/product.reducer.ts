@@ -10,6 +10,9 @@ export const initialProductState: ProductState = {
   countOwnerLessThan: null,
   productsByPartNumber: [],
   ratings: [],
+  queryParams: {},
+  totalPages: 0,
+  totalElements: 0,
 };
 
 export const productStore = createFeature({
@@ -18,9 +21,23 @@ export const productStore = createFeature({
     initialProductState,
     on(
       lab1ProductActions.productsFetched,
-      (state, {products}): ProductState => ({
+      (state, {response}): ProductState => ({
         ...state,
-        products,
+        products: response.content,
+        totalElements: response.totalElements,
+        totalPages: response.totalPages,
+        queryParams: {
+          ...state.queryParams,
+          page: response.number,
+          size: response.size,
+        },
+      }),
+    ),
+    on(
+      lab1ProductActions.queryParamsUpdated,
+      (state, {queryParams}): ProductState => ({
+        ...state,
+        queryParams,
       }),
     ),
     on(

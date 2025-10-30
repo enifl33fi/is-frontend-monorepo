@@ -1,9 +1,15 @@
 import {ChangeDetectionStrategy, Component, inject, Signal} from '@angular/core';
 import {
   lab1OrganizationActions,
+  selectFiltersValues,
   selectOrganizations,
+  selectPage,
+  selectSize,
+  selectSortBy,
+  selectSortDirection,
+  selectTotalElements,
 } from '@is/labs/lab1/shared/organization/store';
-import {TableEntity} from '@is/labs/lab1/shared/types';
+import {EntityQueryParams, TableEntity} from '@is/labs/lab1/shared/types';
 import {EntityTableComponent} from '@is/labs/lab1/shared/ui';
 import {Store} from '@ngrx/store';
 
@@ -34,6 +40,13 @@ export class OrganizationTableComponent {
     selectOrganizations,
   ) as unknown as Signal<TableEntity[]>;
 
+  public readonly total = this.store.selectSignal(selectTotalElements);
+  public readonly size = this.store.selectSignal(selectSize);
+  public readonly page = this.store.selectSignal(selectPage);
+  public readonly sortDirection = this.store.selectSignal(selectSortDirection);
+  public readonly sortBy = this.store.selectSignal(selectSortBy);
+  public readonly filtersValues = this.store.selectSignal(selectFiltersValues);
+
   public onAddClick() {
     this.store.dispatch(lab1OrganizationActions.showAddDialog());
   }
@@ -44,5 +57,9 @@ export class OrganizationTableComponent {
 
   public onDeleteClick(id: number) {
     this.store.dispatch(lab1OrganizationActions.deleteOrganization({id}));
+  }
+
+  public onQueryChange(queryParams: EntityQueryParams) {
+    this.store.dispatch(lab1OrganizationActions.queryParamsFetched({queryParams}));
   }
 }

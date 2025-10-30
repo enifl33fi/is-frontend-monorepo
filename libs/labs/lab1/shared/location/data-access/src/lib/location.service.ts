@@ -2,7 +2,8 @@ import {HttpClient} from '@angular/common/http';
 import {inject, Injectable, OnDestroy} from '@angular/core';
 import {lab1LocationActions} from '@is/labs/lab1/shared/location/store';
 import {FormLocation, Location} from '@is/labs/lab1/shared/location/types';
-import {WS_URL_TOKEN} from '@is/labs/lab1/shared/utils';
+import {EntityQueryParams, PageResponse} from '@is/labs/lab1/shared/types';
+import {formHttpParamsFn, WS_URL_TOKEN} from '@is/labs/lab1/shared/utils';
 import {BACK_URL_TOKEN} from '@is/shared/utils';
 import {Store} from '@ngrx/store';
 import {Client} from '@stomp/stompjs';
@@ -30,8 +31,15 @@ export class LocationService implements OnDestroy {
     this.client.activate();
   }
 
-  public getAllLocations(): Observable<Location[]> {
-    return this.http.get<Location[]>(`${this.backUrlSubject$.getValue()}/location/all`);
+  public getAllLocations(
+    queryParams: EntityQueryParams,
+  ): Observable<PageResponse<Location>> {
+    const params = formHttpParamsFn(queryParams);
+
+    return this.http.get<PageResponse<Location>>(
+      `${this.backUrlSubject$.getValue()}/location/all`,
+      {params},
+    );
   }
 
   public getLocation(id: number): Observable<Location> {

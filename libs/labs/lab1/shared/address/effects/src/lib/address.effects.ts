@@ -1,13 +1,14 @@
 import type {HttpErrorResponse} from '@angular/common/http';
 import {inject, INJECTOR} from '@angular/core';
 import {AddressService} from '@is/labs/lab1/shared/address/data-access';
-import {lab1AddressActions} from '@is/labs/lab1/shared/address/store';
+import {lab1AddressActions, selectQueryParams} from '@is/labs/lab1/shared/address/store';
 import type {AddressDialogContext} from '@is/labs/lab1/shared/address/ui';
 import {AddressDialogComponent} from '@is/labs/lab1/shared/address/ui';
 import {lab1LocationActions} from '@is/labs/lab1/shared/location/store';
 import {lab1RootActions} from '@is/labs/lab1/shared/root/store';
 import type {ErrorResponse} from '@is/labs/lab1/shared/types';
 import {selectAccessToken} from '@is/labs/lab1/shared/user/store';
+import {objectCompareFn} from '@is/labs/lab1/shared/utils';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {concatLatestFrom} from '@ngrx/operators';
 import {Store} from '@ngrx/store';
@@ -25,12 +26,27 @@ import {
   tap,
 } from 'rxjs';
 
-export const addressInitialFetch$ = createEffect(
+export const updateQuery$ = createEffect(
+  (actions$ = inject(Actions), store$ = inject(Store)) => {
+    return actions$.pipe(
+      ofType(lab1AddressActions.queryParamsFetched),
+      concatLatestFrom(() => [store$.select(selectQueryParams)]),
+      filter(
+        ([{queryParams}, previousQueryParams]) =>
+          !objectCompareFn(queryParams, previousQueryParams),
+      ),
+      map(([{queryParams}]) => lab1AddressActions.queryParamsUpdated({queryParams})),
+    );
+  },
+  {
+    functional: true,
+  },
+);
+
+export const fetchByUpdQuery$ = createEffect(
   (actions$ = inject(Actions)) => {
     return actions$.pipe(
-      ofType(lab1RootActions.setActiveTab),
-      filter(({activeTab}) => activeTab === 'address'),
-      take(1),
+      ofType(lab1AddressActions.queryParamsUpdated),
       map(() => lab1AddressActions.fetchAddresses()),
     );
   },
@@ -40,12 +56,17 @@ export const addressInitialFetch$ = createEffect(
 );
 
 export const fetchAddresses$ = createEffect(
-  (actions$ = inject(Actions), addressService = inject(AddressService)) => {
+  (
+    actions$ = inject(Actions),
+    store$ = inject(Store),
+    addressService = inject(AddressService),
+  ) => {
     return actions$.pipe(
       ofType(lab1AddressActions.fetchAddresses),
-      switchMap(() => {
-        return addressService.getAllAddresses().pipe(
-          map((addresses) => lab1AddressActions.addressesFetched({addresses})),
+      concatLatestFrom(() => [store$.select(selectQueryParams)]),
+      switchMap(([, queryParams]) => {
+        return addressService.getAllAddresses(queryParams).pipe(
+          map((response) => lab1AddressActions.addressesFetched({response})),
           catchError((error: unknown) =>
             of(
               lab1AddressActions.addressRequestFailed({

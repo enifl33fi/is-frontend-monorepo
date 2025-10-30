@@ -1,4 +1,4 @@
-<tui-tabs-with-more>
+<tui-tabs-with-more [activeItemIndex]="activeTabIndex()">
   @for (tab of tabs; track tab) {
     <button
       *tuiItem

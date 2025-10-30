@@ -20,5 +20,12 @@ export const rootStore = createFeature({
         loading,
       }),
     ),
+    on(
+      lab1RootActions.setActiveTab,
+      (state, {activeTab}): RootState => ({
+        ...state,
+        activeTab,
+      }),
+    ),
   ),
 });

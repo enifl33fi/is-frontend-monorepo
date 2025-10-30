@@ -8,6 +8,9 @@ export const initialLocationsState: LocationState = {
   selectedLocation: null,
   dialogLoading: false,
   ownLocationIds: [],
+  queryParams: {},
+  totalPages: 0,
+  totalElements: 0,
 };
 
 export const locationStore = createFeature({
@@ -16,12 +19,25 @@ export const locationStore = createFeature({
     initialLocationsState,
     on(
       lab1LocationActions.locationsFetched,
-      (state, {locations}): LocationState => ({
+      (state, {response}): LocationState => ({
         ...state,
-        locations,
+        locations: response.content,
+        totalElements: response.totalElements,
+        totalPages: response.totalPages,
+        queryParams: {
+          ...state.queryParams,
+          page: response.number,
+          size: response.size,
+        },
       }),
     ),
-
+    on(
+      lab1LocationActions.queryParamsUpdated,
+      (state, {queryParams}): LocationState => ({
+        ...state,
+        queryParams,
+      }),
+    ),
     on(
       lab1LocationActions.setDialogLoading,
       (state, {dialogLoading}): LocationState => ({

@@ -8,6 +8,9 @@ export const initialAddressState: AddressState = {
   selectedAddress: null,
   dialogLoading: false,
   ownAddressesIds: [],
+  queryParams: {},
+  totalPages: 0,
+  totalElements: 0,
 };
 
 export const addressStore = createFeature({
@@ -16,9 +19,23 @@ export const addressStore = createFeature({
     initialAddressState,
     on(
       lab1AddressActions.addressesFetched,
-      (state, {addresses}): AddressState => ({
+      (state, {response}): AddressState => ({
         ...state,
-        addresses,
+        addresses: response.content,
+        totalElements: response.totalElements,
+        totalPages: response.totalPages,
+        queryParams: {
+          ...state.queryParams,
+          page: response.number,
+          size: response.size,
+        },
+      }),
+    ),
+    on(
+      lab1AddressActions.queryParamsUpdated,
+      (state, {queryParams}): AddressState => ({
+        ...state,
+        queryParams,
       }),
     ),
     on(

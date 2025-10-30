@@ -2,7 +2,8 @@ import {HttpClient} from '@angular/common/http';
 import {inject, Injectable, OnDestroy} from '@angular/core';
 import {lab1PersonActions} from '@is/labs/lab1/shared/person/store';
 import {FormPerson, Person, TablePerson} from '@is/labs/lab1/shared/person/types';
-import {WS_URL_TOKEN} from '@is/labs/lab1/shared/utils';
+import {EntityQueryParams, PageResponse} from '@is/labs/lab1/shared/types';
+import {formHttpParamsFn, WS_URL_TOKEN} from '@is/labs/lab1/shared/utils';
 import {BACK_URL_TOKEN} from '@is/shared/utils';
 import {Store} from '@ngrx/store';
 import {Client} from '@stomp/stompjs';
@@ -32,10 +33,23 @@ export class PersonService implements OnDestroy {
     this.client.activate();
   }
 
-  public getAllPersons(): Observable<TablePerson[]> {
+  public getAllPersons(
+    queryParams: EntityQueryParams,
+  ): Observable<PageResponse<TablePerson>> {
+    const params = formHttpParamsFn(queryParams);
+
     return this.http
-      .get<Person[]>(`${this.backUrlSubject$.getValue()}/person/all`)
-      .pipe(map((persons) => persons.map(convertPersonToTablePerson)));
+      .get<
+        PageResponse<Person>
+      >(`${this.backUrlSubject$.getValue()}/person/all`, {params})
+      .pipe(
+        map((response) => {
+          return {
+            ...response,
+            content: response.content.map(convertPersonToTablePerson),
+          };
+        }),
+      );
   }
 
   public getPerson(id: number): Observable<Person> {

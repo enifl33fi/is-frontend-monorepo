@@ -1,5 +1,6 @@
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, inject} from '@angular/core';
+import {selectActiveTab} from '@is/labs/lab1/shared/root/store';
 import {Tab, TABS} from '@is/labs/lab1/shared/root/types';
 import {lab1RouterActions} from '@is/labs/lab1/shared/router/store';
 import {Store} from '@ngrx/store';
@@ -17,6 +18,13 @@ export class HomeHeaderComponent {
   private readonly store = inject(Store);
 
   public readonly tabs = TABS;
+  public readonly activeTab = this.store.selectSignal(selectActiveTab);
+
+  public readonly activeTabIndex = computed(() => {
+    const activeTab = this.activeTab();
+
+    return this.tabs.indexOf(activeTab);
+  });
 
   public onClick(tab: Tab): void {
     this.store.dispatch(lab1RouterActions.navigateToTab({tab}));

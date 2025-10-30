@@ -2,7 +2,8 @@ import {HttpClient} from '@angular/common/http';
 import {inject, Injectable, OnDestroy} from '@angular/core';
 import {lab1ProductActions} from '@is/labs/lab1/shared/product/store';
 import {FormProduct, Product, TableProduct} from '@is/labs/lab1/shared/product/types';
-import {WS_URL_TOKEN} from '@is/labs/lab1/shared/utils';
+import {EntityQueryParams, PageResponse} from '@is/labs/lab1/shared/types';
+import {formHttpParamsFn, WS_URL_TOKEN} from '@is/labs/lab1/shared/utils';
 import {BACK_URL_TOKEN} from '@is/shared/utils';
 import {Store} from '@ngrx/store';
 import {Client} from '@stomp/stompjs';
@@ -32,10 +33,23 @@ export class ProductService implements OnDestroy {
     this.client.activate();
   }
 
-  public getAllProducts(): Observable<TableProduct[]> {
+  public getAllProducts(
+    queryParams: EntityQueryParams,
+  ): Observable<PageResponse<TableProduct>> {
+    const params = formHttpParamsFn(queryParams);
+
     return this.http
-      .get<Product[]>(`${this.backUrlSubject$.getValue()}/product/all`)
-      .pipe(map((products) => products.map(convertProductToTableProduct)));
+      .get<
+        PageResponse<Product>
+      >(`${this.backUrlSubject$.getValue()}/product/all`, {params})
+      .pipe(
+        map((response) => {
+          return {
+            ...response,
+            content: response.content.map(convertProductToTableProduct),
+          };
+        }),
+      );
   }
 
   public getProduct(id: number): Observable<Product> {

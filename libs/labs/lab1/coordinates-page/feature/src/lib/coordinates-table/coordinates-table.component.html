@@ -1,7 +1,14 @@
 <lab1-entity-table
   [columns]="columns"
   [entities]="coordinatesSignal()"
+  [filtersValues]="filtersValues()"
+  [page]="page()"
+  [size]="size()"
+  [sortBy]="sortBy()"
+  [sortDirection]="sortDirection()"
+  [total]="total()"
   (handleAddClick)="onAddClick()"
   (handleDeleteClick)="onDeleteClick($event)"
   (handleViewClick)="onViewClick($event)"
+  (queryChanged)="onQueryChange($event)"
 ></lab1-entity-table>

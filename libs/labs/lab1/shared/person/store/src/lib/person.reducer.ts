@@ -8,6 +8,9 @@ export const initialPersonState: PersonState = {
   selectedPerson: null,
   dialogLoading: false,
   ownPersonIds: [],
+  queryParams: {},
+  totalPages: 0,
+  totalElements: 0,
 };
 
 export const personStore = createFeature({
@@ -16,9 +19,23 @@ export const personStore = createFeature({
     initialPersonState,
     on(
       lab1PersonActions.personsFetched,
-      (state, {persons}): PersonState => ({
+      (state, {response}): PersonState => ({
         ...state,
-        persons,
+        persons: response.content,
+        totalElements: response.totalElements,
+        totalPages: response.totalPages,
+        queryParams: {
+          ...state.queryParams,
+          page: response.number,
+          size: response.size,
+        },
+      }),
+    ),
+    on(
+      lab1PersonActions.queryParamsUpdated,
+      (state, {queryParams}): PersonState => ({
+        ...state,
+        queryParams,
       }),
     ),
     on(

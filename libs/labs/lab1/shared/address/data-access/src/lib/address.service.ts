@@ -2,7 +2,8 @@ import {HttpClient} from '@angular/common/http';
 import {inject, Injectable, OnDestroy} from '@angular/core';
 import {lab1AddressActions} from '@is/labs/lab1/shared/address/store';
 import {Address, FormAddress, TableAddress} from '@is/labs/lab1/shared/address/types';
-import {WS_URL_TOKEN} from '@is/labs/lab1/shared/utils';
+import {EntityQueryParams, PageResponse} from '@is/labs/lab1/shared/types';
+import {formHttpParamsFn, WS_URL_TOKEN} from '@is/labs/lab1/shared/utils';
 import {BACK_URL_TOKEN} from '@is/shared/utils';
 import {Store} from '@ngrx/store';
 import {Client} from '@stomp/stompjs';
@@ -32,10 +33,23 @@ export class AddressService implements OnDestroy {
     this.client.activate();
   }
 
-  public getAllAddresses(): Observable<TableAddress[]> {
+  public getAllAddresses(
+    queryParams: EntityQueryParams,
+  ): Observable<PageResponse<TableAddress>> {
+    const params = formHttpParamsFn(queryParams);
+
     return this.http
-      .get<Address[]>(`${this.backUrlSubject$.getValue()}/address/all`)
-      .pipe(map((addresses) => addresses.map(convertAddressToTableAddress)));
+      .get<
+        PageResponse<Address>
+      >(`${this.backUrlSubject$.getValue()}/address/all`, {params})
+      .pipe(
+        map((response) => {
+          return {
+            ...response,
+            content: response.content.map(convertAddressToTableAddress),
+          };
+        }),
+      );
   }
 
   public getAddress(id: number): Observable<Address> {

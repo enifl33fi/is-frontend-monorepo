@@ -8,6 +8,9 @@ export const initialCoordinatesState: CoordinatesState = {
   dialogLoading: false,
   selectedCoordinates: null,
   ownCoordinatesIds: [],
+  queryParams: {},
+  totalPages: 0,
+  totalElements: 0,
 };
 
 export const coordinatesStore = createFeature({
@@ -16,9 +19,23 @@ export const coordinatesStore = createFeature({
     initialCoordinatesState,
     on(
       lab1CoordinatesActions.coordinatesFetched,
-      (state, {coordinates}): CoordinatesState => ({
+      (state, {response}): CoordinatesState => ({
         ...state,
-        coordinates,
+        coordinates: response.content,
+        totalElements: response.totalElements,
+        totalPages: response.totalPages,
+        queryParams: {
+          ...state.queryParams,
+          page: response.number,
+          size: response.size,
+        },
+      }),
+    ),
+    on(
+      lab1CoordinatesActions.queryParamsUpdated,
+      (state, {queryParams}): CoordinatesState => ({
+        ...state,
+        queryParams,
       }),
     ),
     on(

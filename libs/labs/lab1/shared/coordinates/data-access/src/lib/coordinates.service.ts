@@ -2,7 +2,8 @@ import {HttpClient} from '@angular/common/http';
 import {inject, Injectable, OnDestroy} from '@angular/core';
 import {lab1CoordinatesActions} from '@is/labs/lab1/shared/coordinates/store';
 import {Coordinates, FormCoordinates} from '@is/labs/lab1/shared/coordinates/types';
-import {WS_URL_TOKEN} from '@is/labs/lab1/shared/utils';
+import {EntityQueryParams, PageResponse} from '@is/labs/lab1/shared/types';
+import {formHttpParamsFn, WS_URL_TOKEN} from '@is/labs/lab1/shared/utils';
 import {BACK_URL_TOKEN} from '@is/shared/utils';
 import {Store} from '@ngrx/store';
 import {Client} from '@stomp/stompjs';
@@ -30,9 +31,14 @@ export class CoordinatesService implements OnDestroy {
     this.client.activate();
   }
 
-  public getAllCoordinates(): Observable<Coordinates[]> {
-    return this.http.get<Coordinates[]>(
+  public getAllCoordinates(
+    queryParams: EntityQueryParams,
+  ): Observable<PageResponse<Coordinates>> {
+    const params = formHttpParamsFn(queryParams);
+
+    return this.http.get<PageResponse<Coordinates>>(
       `${this.backUrlSubject$.getValue()}/coordinates/all`,
+      {params},
     );
   }
 

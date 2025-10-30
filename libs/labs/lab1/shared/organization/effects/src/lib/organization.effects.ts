@@ -2,12 +2,16 @@ import type {HttpErrorResponse} from '@angular/common/http';
 import {inject, INJECTOR} from '@angular/core';
 import {lab1AddressActions} from '@is/labs/lab1/shared/address/store';
 import {OrganizationService} from '@is/labs/lab1/shared/organization/data-access';
-import {lab1OrganizationActions} from '@is/labs/lab1/shared/organization/store';
+import {
+  lab1OrganizationActions,
+  selectQueryParams,
+} from '@is/labs/lab1/shared/organization/store';
 import type {OrganizationDialogContext} from '@is/labs/lab1/shared/organization/ui';
 import {OrganizationDialogComponent} from '@is/labs/lab1/shared/organization/ui';
 import {lab1RootActions} from '@is/labs/lab1/shared/root/store';
 import type {ErrorResponse} from '@is/labs/lab1/shared/types';
 import {selectAccessToken} from '@is/labs/lab1/shared/user/store';
+import {objectCompareFn} from '@is/labs/lab1/shared/utils';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {concatLatestFrom} from '@ngrx/operators';
 import {Store} from '@ngrx/store';
@@ -25,12 +29,27 @@ import {
   tap,
 } from 'rxjs';
 
-export const organizationInitialFetch$ = createEffect(
+export const updateQuery$ = createEffect(
+  (actions$ = inject(Actions), store$ = inject(Store)) => {
+    return actions$.pipe(
+      ofType(lab1OrganizationActions.queryParamsFetched),
+      concatLatestFrom(() => [store$.select(selectQueryParams)]),
+      filter(
+        ([{queryParams}, previousQueryParams]) =>
+          !objectCompareFn(queryParams, previousQueryParams),
+      ),
+      map(([{queryParams}]) => lab1OrganizationActions.queryParamsUpdated({queryParams})),
+    );
+  },
+  {
+    functional: true,
+  },
+);
+
+export const fetchByUpdQuery$ = createEffect(
   (actions$ = inject(Actions)) => {
     return actions$.pipe(
-      ofType(lab1RootActions.setActiveTab),
-      filter(({activeTab}) => activeTab === 'organization'),
-      take(1),
+      ofType(lab1OrganizationActions.queryParamsUpdated),
       map(() => lab1OrganizationActions.fetchOrganizations()),
     );
   },
@@ -40,14 +59,17 @@ export const organizationInitialFetch$ = createEffect(
 );
 
 export const fetchOrganizations$ = createEffect(
-  (actions$ = inject(Actions), organizationService = inject(OrganizationService)) => {
+  (
+    actions$ = inject(Actions),
+    store$ = inject(Store),
+    organizationService = inject(OrganizationService),
+  ) => {
     return actions$.pipe(
       ofType(lab1OrganizationActions.fetchOrganizations),
-      switchMap(() => {
-        return organizationService.getAllOrganizations().pipe(
-          map((organizations) =>
-            lab1OrganizationActions.organizationsFetched({organizations}),
-          ),
+      concatLatestFrom(() => [store$.select(selectQueryParams)]),
+      switchMap(([, queryParams]) => {
+        return organizationService.getAllOrganizations(queryParams).pipe(
+          map((response) => lab1OrganizationActions.organizationsFetched({response})),
           catchError((error: unknown) =>
             of(
               lab1OrganizationActions.organizationRequestFailed({

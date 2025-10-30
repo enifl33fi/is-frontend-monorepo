@@ -1,6 +1,15 @@
 import {ChangeDetectionStrategy, Component, inject, Signal} from '@angular/core';
-import {lab1LocationActions, selectLocations} from '@is/labs/lab1/shared/location/store';
-import {TableEntity} from '@is/labs/lab1/shared/types';
+import {
+  lab1LocationActions,
+  selectFiltersValues,
+  selectLocations,
+  selectPage,
+  selectSize,
+  selectSortBy,
+  selectSortDirection,
+  selectTotalElements,
+} from '@is/labs/lab1/shared/location/store';
+import {EntityQueryParams, TableEntity} from '@is/labs/lab1/shared/types';
 import {EntityTableComponent} from '@is/labs/lab1/shared/ui';
 import {Store} from '@ngrx/store';
 
@@ -21,6 +30,13 @@ export class LocationTableComponent {
     selectLocations,
   ) as unknown as Signal<TableEntity[]>;
 
+  public readonly total = this.store.selectSignal(selectTotalElements);
+  public readonly size = this.store.selectSignal(selectSize);
+  public readonly page = this.store.selectSignal(selectPage);
+  public readonly sortDirection = this.store.selectSignal(selectSortDirection);
+  public readonly sortBy = this.store.selectSignal(selectSortBy);
+  public readonly filtersValues = this.store.selectSignal(selectFiltersValues);
+
   public onAddClick() {
     this.store.dispatch(lab1LocationActions.showAddDialog());
   }
@@ -31,5 +47,9 @@ export class LocationTableComponent {
 
   public onDeleteClick(id: number) {
     this.store.dispatch(lab1LocationActions.deleteLocation({id}));
+  }
+
+  public onQueryChange(queryParams: EntityQueryParams) {
+    this.store.dispatch(lab1LocationActions.queryParamsFetched({queryParams}));
   }
 }

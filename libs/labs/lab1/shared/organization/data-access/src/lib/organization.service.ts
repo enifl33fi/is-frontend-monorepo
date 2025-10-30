@@ -6,7 +6,8 @@ import {
   Organization,
   TableOrganization,
 } from '@is/labs/lab1/shared/organization/types';
-import {WS_URL_TOKEN} from '@is/labs/lab1/shared/utils';
+import {EntityQueryParams, PageResponse} from '@is/labs/lab1/shared/types';
+import {formHttpParamsFn, WS_URL_TOKEN} from '@is/labs/lab1/shared/utils';
 import {BACK_URL_TOKEN} from '@is/shared/utils';
 import {Store} from '@ngrx/store';
 import {Client} from '@stomp/stompjs';
@@ -36,11 +37,22 @@ export class OrganizationService implements OnDestroy {
     this.client.activate();
   }
 
-  public getAllOrganizations(): Observable<TableOrganization[]> {
+  public getAllOrganizations(
+    queryParams: EntityQueryParams,
+  ): Observable<PageResponse<TableOrganization>> {
+    const params = formHttpParamsFn(queryParams);
+
     return this.http
-      .get<Organization[]>(`${this.backUrlSubject$.getValue()}/organization/all`)
+      .get<
+        PageResponse<Organization>
+      >(`${this.backUrlSubject$.getValue()}/organization/all`, {params})
       .pipe(
-        map((organizations) => organizations.map(convertOrganizationToOrganizationTable)),
+        map((response) => {
+          return {
+            ...response,
+            content: response.content.map(convertOrganizationToOrganizationTable),
+          };
+        }),
       );
   }
 

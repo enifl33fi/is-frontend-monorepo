@@ -1,5 +1,6 @@
 import type {HttpErrorResponse} from '@angular/common/http';
 import type {Coordinates, FormCoordinates} from '@is/labs/lab1/shared/coordinates/types';
+import type {EntityQueryParams, PageResponse} from '@is/labs/lab1/shared/types';
 import {createActionGroup, emptyProps, props} from '@ngrx/store';
 
 export const coordinatesFeatureKey = 'coordinates';
@@ -9,7 +10,7 @@ export const lab1CoordinatesActions = createActionGroup({
   events: {
     fetchCoordinates: emptyProps(),
     fetchCoordinatesById: props<{id: number}>(),
-    coordinatesFetched: props<{coordinates: Coordinates[]}>(),
+    coordinatesFetched: props<{response: PageResponse<Coordinates>}>(),
     coordinatesRequestFailed: props<{error: HttpErrorResponse}>(),
     fetchOwnCoordinatesIds: emptyProps(),
     setDialogLoading: props<{dialogLoading: boolean}>(),
@@ -23,5 +24,8 @@ export const lab1CoordinatesActions = createActionGroup({
     deleteCoordinatesCompleted: emptyProps(),
     showViewDialog: props<{id: number}>(),
     showAddDialog: emptyProps(),
+
+    queryParamsFetched: props<{queryParams: EntityQueryParams}>(),
+    queryParamsUpdated: props<{queryParams: EntityQueryParams}>(),
   },
 });

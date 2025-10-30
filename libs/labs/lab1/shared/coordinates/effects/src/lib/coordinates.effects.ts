@@ -1,12 +1,16 @@
 import type {HttpErrorResponse} from '@angular/common/http';
 import {inject, INJECTOR} from '@angular/core';
 import {CoordinatesService} from '@is/labs/lab1/shared/coordinates/data-access';
-import {lab1CoordinatesActions} from '@is/labs/lab1/shared/coordinates/store';
+import {
+  lab1CoordinatesActions,
+  selectQueryParams,
+} from '@is/labs/lab1/shared/coordinates/store';
 import type {CoordinatesDialogContext} from '@is/labs/lab1/shared/coordinates/ui';
 import {CoordinatesDialogComponent} from '@is/labs/lab1/shared/coordinates/ui';
 import {lab1RootActions} from '@is/labs/lab1/shared/root/store';
 import type {ErrorResponse} from '@is/labs/lab1/shared/types';
 import {selectAccessToken} from '@is/labs/lab1/shared/user/store';
+import {objectCompareFn} from '@is/labs/lab1/shared/utils';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {concatLatestFrom} from '@ngrx/operators';
 import {Store} from '@ngrx/store';
@@ -25,12 +29,27 @@ import {
   tap,
 } from 'rxjs';
 
+export const updateQuery$ = createEffect(
+  (actions$ = inject(Actions), store$ = inject(Store)) => {
+    return actions$.pipe(
+      ofType(lab1CoordinatesActions.queryParamsFetched),
+      concatLatestFrom(() => [store$.select(selectQueryParams)]),
+      filter(
+        ([{queryParams}, previousQueryParams]) =>
+          !objectCompareFn(queryParams, previousQueryParams),
+      ),
+      map(([{queryParams}]) => lab1CoordinatesActions.queryParamsUpdated({queryParams})),
+    );
+  },
+  {
+    functional: true,
+  },
+);
+
 export const coordinatesInitialFetch$ = createEffect(
   (actions$ = inject(Actions)) => {
     return actions$.pipe(
-      ofType(lab1RootActions.setActiveTab),
-      filter(({activeTab}) => activeTab === 'coordinates'),
-      take(1),
+      ofType(lab1CoordinatesActions.queryParamsUpdated),
       map(() => lab1CoordinatesActions.fetchCoordinates()),
     );
   },
@@ -40,12 +59,17 @@ export const coordinatesInitialFetch$ = createEffect(
 );
 
 export const fetchCoordinates$ = createEffect(
-  (actions$ = inject(Actions), coordinatesService = inject(CoordinatesService)) => {
+  (
+    actions$ = inject(Actions),
+    store$ = inject(Store),
+    coordinatesService = inject(CoordinatesService),
+  ) => {
     return actions$.pipe(
       ofType(lab1CoordinatesActions.fetchCoordinates),
-      switchMap(() => {
-        return coordinatesService.getAllCoordinates().pipe(
-          map((coordinates) => lab1CoordinatesActions.coordinatesFetched({coordinates})),
+      concatLatestFrom(() => [store$.select(selectQueryParams)]),
+      switchMap(([, queryParams]) => {
+        return coordinatesService.getAllCoordinates(queryParams).pipe(
+          map((response) => lab1CoordinatesActions.coordinatesFetched({response})),
           catchError((error: unknown) =>
             of(
               lab1CoordinatesActions.coordinatesRequestFailed({

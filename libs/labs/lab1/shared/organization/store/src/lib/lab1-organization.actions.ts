@@ -4,6 +4,7 @@ import type {
   Organization,
   TableOrganization,
 } from '@is/labs/lab1/shared/organization/types';
+import type {EntityQueryParams, PageResponse} from '@is/labs/lab1/shared/types';
 import {createActionGroup, emptyProps, props} from '@ngrx/store';
 
 export const organizationFeatureKey = 'organization';
@@ -11,7 +12,7 @@ export const organizationFeatureKey = 'organization';
 export const lab1OrganizationActions = createActionGroup({
   source: organizationFeatureKey,
   events: {
-    organizationsFetched: props<{organizations: TableOrganization[]}>(),
+    organizationsFetched: props<{response: PageResponse<TableOrganization>}>(),
     organizationRequestFailed: props<{error: HttpErrorResponse}>(),
     fetchOrganizations: emptyProps(),
     fetchOrganizationById: props<{id: number}>(),
@@ -27,5 +28,8 @@ export const lab1OrganizationActions = createActionGroup({
     deleteOrganizationCompleted: emptyProps(),
     showViewDialog: props<{id: number}>(),
     showAddDialog: emptyProps(),
+
+    queryParamsFetched: props<{queryParams: EntityQueryParams}>(),
+    queryParamsUpdated: props<{queryParams: EntityQueryParams}>(),
   },
 });

@@ -1,5 +1,6 @@
 import type {HttpErrorResponse} from '@angular/common/http';
 import type {FormPerson, Person, TablePerson} from '@is/labs/lab1/shared/person/types';
+import type {EntityQueryParams, PageResponse} from '@is/labs/lab1/shared/types';
 import {createActionGroup, emptyProps, props} from '@ngrx/store';
 
 export const personFeatureKey = 'person';
@@ -7,7 +8,7 @@ export const personFeatureKey = 'person';
 export const lab1PersonActions = createActionGroup({
   source: personFeatureKey,
   events: {
-    personsFetched: props<{persons: TablePerson[]}>(),
+    personsFetched: props<{response: PageResponse<TablePerson>}>(),
     personRequestFailed: props<{error: HttpErrorResponse}>(),
     fetchPersons: emptyProps(),
     fetchPersonById: props<{id: number}>(),
@@ -23,5 +24,8 @@ export const lab1PersonActions = createActionGroup({
     deletePersonCompleted: emptyProps(),
     showViewDialog: props<{id: number}>(),
     showAddDialog: emptyProps(),
+
+    queryParamsFetched: props<{queryParams: EntityQueryParams}>(),
+    queryParamsUpdated: props<{queryParams: EntityQueryParams}>(),
   },
 });

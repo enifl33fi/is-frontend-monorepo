@@ -4,6 +4,7 @@ import type {
   FormAddress,
   TableAddress,
 } from '@is/labs/lab1/shared/address/types';
+import type {EntityQueryParams, PageResponse} from '@is/labs/lab1/shared/types';
 import {createActionGroup, emptyProps, props} from '@ngrx/store';
 
 export const addressFeatureKey = 'address';
@@ -11,7 +12,7 @@ export const addressFeatureKey = 'address';
 export const lab1AddressActions = createActionGroup({
   source: addressFeatureKey,
   events: {
-    addressesFetched: props<{addresses: TableAddress[]}>(),
+    addressesFetched: props<{response: PageResponse<TableAddress>}>(),
     addressRequestFailed: props<{error: HttpErrorResponse}>(),
     fetchAddresses: emptyProps(),
     fetchAddressesById: props<{id: number}>(),
@@ -27,5 +28,8 @@ export const lab1AddressActions = createActionGroup({
     deleteAddressCompleted: emptyProps(),
     showViewDialog: props<{id: number}>(),
     showAddDialog: emptyProps(),
+
+    queryParamsFetched: props<{queryParams: EntityQueryParams}>(),
+    queryParamsUpdated: props<{queryParams: EntityQueryParams}>(),
   },
 });

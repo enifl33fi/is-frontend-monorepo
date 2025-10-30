@@ -1,6 +1,15 @@
 import {ChangeDetectionStrategy, Component, inject, Signal} from '@angular/core';
-import {lab1PersonActions, selectPersons} from '@is/labs/lab1/shared/person/store';
-import {TableEntity} from '@is/labs/lab1/shared/types';
+import {
+  lab1PersonActions,
+  selectFiltersValues,
+  selectPage,
+  selectPersons,
+  selectSize,
+  selectSortBy,
+  selectSortDirection,
+  selectTotalElements,
+} from '@is/labs/lab1/shared/person/store';
+import {EntityQueryParams, TableEntity} from '@is/labs/lab1/shared/types';
 import {EntityTableComponent} from '@is/labs/lab1/shared/ui';
 import {Store} from '@ngrx/store';
 
@@ -31,6 +40,13 @@ export class PersonTableComponent {
     selectPersons,
   ) as unknown as Signal<TableEntity[]>;
 
+  public readonly total = this.store.selectSignal(selectTotalElements);
+  public readonly size = this.store.selectSignal(selectSize);
+  public readonly page = this.store.selectSignal(selectPage);
+  public readonly sortDirection = this.store.selectSignal(selectSortDirection);
+  public readonly sortBy = this.store.selectSignal(selectSortBy);
+  public readonly filtersValues = this.store.selectSignal(selectFiltersValues);
+
   public onAddClick() {
     this.store.dispatch(lab1PersonActions.showAddDialog());
   }
@@ -41,5 +57,9 @@ export class PersonTableComponent {
 
   public onDeleteClick(id: number) {
     this.store.dispatch(lab1PersonActions.deletePerson({id}));
+  }
+
+  public onQueryChange(queryParams: EntityQueryParams) {
+    this.store.dispatch(lab1PersonActions.queryParamsFetched({queryParams}));
   }
 }

@@ -4,6 +4,7 @@ import type {
   Product,
   TableProduct,
 } from '@is/labs/lab1/shared/product/types';
+import type {EntityQueryParams, PageResponse} from '@is/labs/lab1/shared/types';
 import {createActionGroup, emptyProps, props} from '@ngrx/store';
 
 export const productFeatureKey = 'product';
@@ -12,7 +13,7 @@ export const lab1ProductActions = createActionGroup({
   source: productFeatureKey,
   events: {
     fetchProducts: emptyProps(),
-    productsFetched: props<{products: TableProduct[]}>(),
+    productsFetched: props<{response: PageResponse<TableProduct>}>(),
     productRequestFailed: props<{error: HttpErrorResponse}>(),
     fetchProductById: props<{id: number}>(),
     setDialogLoading: props<{dialogLoading: boolean}>(),
@@ -33,5 +34,8 @@ export const lab1ProductActions = createActionGroup({
     productsByPartNumberFetched: props<{products: TableProduct[]}>(),
     ratingsFetched: props<{ratings: number[]}>(),
     priceDecreased: emptyProps(),
+
+    queryParamsFetched: props<{queryParams: EntityQueryParams}>(),
+    queryParamsUpdated: props<{queryParams: EntityQueryParams}>(),
   },
 });

@@ -1,12 +1,16 @@
 import type {HttpErrorResponse} from '@angular/common/http';
 import {inject, INJECTOR} from '@angular/core';
 import {LocationService} from '@is/labs/lab1/shared/location/data-access';
-import {lab1LocationActions} from '@is/labs/lab1/shared/location/store';
+import {
+  lab1LocationActions,
+  selectQueryParams,
+} from '@is/labs/lab1/shared/location/store';
 import type {LocationDialogContext} from '@is/labs/lab1/shared/location/ui';
 import {LocationDialogComponent} from '@is/labs/lab1/shared/location/ui';
 import {lab1RootActions} from '@is/labs/lab1/shared/root/store';
 import type {ErrorResponse} from '@is/labs/lab1/shared/types';
 import {selectAccessToken} from '@is/labs/lab1/shared/user/store';
+import {objectCompareFn} from '@is/labs/lab1/shared/utils';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {concatLatestFrom} from '@ngrx/operators';
 import {Store} from '@ngrx/store';
@@ -24,12 +28,27 @@ import {
   tap,
 } from 'rxjs';
 
-export const locationInitialFetch$ = createEffect(
+export const updateQuery$ = createEffect(
+  (actions$ = inject(Actions), store$ = inject(Store)) => {
+    return actions$.pipe(
+      ofType(lab1LocationActions.queryParamsFetched),
+      concatLatestFrom(() => [store$.select(selectQueryParams)]),
+      filter(
+        ([{queryParams}, previousQueryParams]) =>
+          !objectCompareFn(queryParams, previousQueryParams),
+      ),
+      map(([{queryParams}]) => lab1LocationActions.queryParamsUpdated({queryParams})),
+    );
+  },
+  {
+    functional: true,
+  },
+);
+
+export const fetchByUpdQuery$$ = createEffect(
   (actions$ = inject(Actions)) => {
     return actions$.pipe(
-      ofType(lab1RootActions.setActiveTab),
-      filter(({activeTab}) => activeTab === 'location'),
-      take(1),
+      ofType(lab1LocationActions.queryParamsUpdated),
       map(() => lab1LocationActions.fetchLocations()),
     );
   },
@@ -39,12 +58,17 @@ export const locationInitialFetch$ = createEffect(
 );
 
 export const fetchLocations$ = createEffect(
-  (actions$ = inject(Actions), locationService = inject(LocationService)) => {
+  (
+    actions$ = inject(Actions),
+    store$ = inject(Store),
+    locationService = inject(LocationService),
+  ) => {
     return actions$.pipe(
       ofType(lab1LocationActions.fetchLocations),
-      switchMap(() => {
-        return locationService.getAllLocations().pipe(
-          map((locations) => lab1LocationActions.locationsFetched({locations})),
+      concatLatestFrom(() => [store$.select(selectQueryParams)]),
+      switchMap(([, queryParams]) => {
+        return locationService.getAllLocations(queryParams).pipe(
+          map((response) => lab1LocationActions.locationsFetched({response})),
           catchError((error: unknown) =>
             of(
               lab1LocationActions.locationRequestFailed({

@@ -1,3 +1,4 @@
+export * from './lib/helpers/form-http-params.fn';
 export * from './lib/helpers/full-filter.fn';
 export * from './lib/helpers/object-compare.fn';
 export * from './lib/helpers/paginate.fn';

@@ -2,12 +2,13 @@ import type {HttpErrorResponse} from '@angular/common/http';
 import {inject, INJECTOR} from '@angular/core';
 import {lab1LocationActions} from '@is/labs/lab1/shared/location/store';
 import {PersonService} from '@is/labs/lab1/shared/person/data-access';
-import {lab1PersonActions} from '@is/labs/lab1/shared/person/store';
+import {lab1PersonActions, selectQueryParams} from '@is/labs/lab1/shared/person/store';
 import type {PersonDialogContext} from '@is/labs/lab1/shared/person/ui';
 import {PersonDialogComponent} from '@is/labs/lab1/shared/person/ui';
 import {lab1RootActions} from '@is/labs/lab1/shared/root/store';
 import type {ErrorResponse} from '@is/labs/lab1/shared/types';
 import {selectAccessToken} from '@is/labs/lab1/shared/user/store';
+import {objectCompareFn} from '@is/labs/lab1/shared/utils';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {concatLatestFrom} from '@ngrx/operators';
 import {Store} from '@ngrx/store';
@@ -25,12 +26,27 @@ import {
   tap,
 } from 'rxjs';
 
-export const personInitialFetch$ = createEffect(
+export const updateQuery$ = createEffect(
+  (actions$ = inject(Actions), store$ = inject(Store)) => {
+    return actions$.pipe(
+      ofType(lab1PersonActions.queryParamsFetched),
+      concatLatestFrom(() => [store$.select(selectQueryParams)]),
+      filter(
+        ([{queryParams}, previousQueryParams]) =>
+          !objectCompareFn(queryParams, previousQueryParams),
+      ),
+      map(([{queryParams}]) => lab1PersonActions.queryParamsUpdated({queryParams})),
+    );
+  },
+  {
+    functional: true,
+  },
+);
+
+export const fetchByUpdQuery$ = createEffect(
   (actions$ = inject(Actions)) => {
     return actions$.pipe(
-      ofType(lab1RootActions.setActiveTab),
-      filter(({activeTab}) => activeTab === 'person'),
-      take(1),
+      ofType(lab1PersonActions.queryParamsUpdated),
       map(() => lab1PersonActions.fetchPersons()),
     );
   },
@@ -40,12 +56,17 @@ export const personInitialFetch$ = createEffect(
 );
 
 export const fetchPersons$ = createEffect(
-  (actions$ = inject(Actions), personService = inject(PersonService)) => {
+  (
+    actions$ = inject(Actions),
+    store$ = inject(Store),
+    personService = inject(PersonService),
+  ) => {
     return actions$.pipe(
       ofType(lab1PersonActions.fetchPersons),
-      switchMap(() => {
-        return personService.getAllPersons().pipe(
-          map((persons) => lab1PersonActions.personsFetched({persons})),
+      concatLatestFrom(() => [store$.select(selectQueryParams)]),
+      switchMap(([, queryParams]) => {
+        return personService.getAllPersons(queryParams).pipe(
+          map((response) => lab1PersonActions.personsFetched({response})),
           catchError((error: unknown) =>
             of(
               lab1PersonActions.personRequestFailed({

@@ -11,6 +11,9 @@ export const initialOrganizationState: OrganizationState = {
   selectedOrganization: null,
   dialogLoading: false,
   ownOrganizationIds: [],
+  queryParams: {},
+  totalPages: 0,
+  totalElements: 0,
 };
 
 export const organizationStore = createFeature({
@@ -19,9 +22,23 @@ export const organizationStore = createFeature({
     initialOrganizationState,
     on(
       lab1OrganizationActions.organizationsFetched,
-      (state, {organizations}): OrganizationState => ({
+      (state, {response}): OrganizationState => ({
         ...state,
-        organizations,
+        organizations: response.content,
+        totalElements: response.totalElements,
+        totalPages: response.totalPages,
+        queryParams: {
+          ...state.queryParams,
+          page: response.number,
+          size: response.size,
+        },
+      }),
+    ),
+    on(
+      lab1OrganizationActions.queryParamsUpdated,
+      (state, {queryParams}): OrganizationState => ({
+        ...state,
+        queryParams,
       }),
     ),
     on(
