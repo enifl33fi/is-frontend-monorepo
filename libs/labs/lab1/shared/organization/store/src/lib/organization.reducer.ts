@@ -25,12 +25,12 @@ export const organizationStore = createFeature({
       (state, {response}): OrganizationState => ({
         ...state,
         organizations: response.content,
-        totalElements: response.totalElements,
-        totalPages: response.totalPages,
+        totalElements: response.page.totalElements,
+        totalPages: response.page.totalPages,
         queryParams: {
           ...state.queryParams,
-          page: response.number,
-          size: response.size,
+          page: response.page.number,
+          size: response.page.size,
         },
       }),
     ),

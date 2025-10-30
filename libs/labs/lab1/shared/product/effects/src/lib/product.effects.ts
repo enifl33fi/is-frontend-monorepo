@@ -329,59 +329,15 @@ export const showErrorAlert$ = createEffect(
   {functional: true},
 );
 
-export const fetchOwnerCountLessThan$ = createEffect(
+export const fetchAverageRating$ = createEffect(
   (actions$ = inject(Actions), productService = inject(ProductService)) => {
     return actions$.pipe(
-      ofType(lab1ProductActions.fetchOwnerCountLessThan),
-      switchMap(({ownerId}) => {
-        return productService.countOwnerLessThan(ownerId).pipe(
-          map((ownerCount) => lab1ProductActions.ownerCountLessThanFetched({ownerCount})),
-          catchError((error: unknown) =>
-            of(
-              lab1ProductActions.productRequestFailed({
-                error: error as HttpErrorResponse,
-              }),
-            ),
-          ),
-        );
-      }),
-    );
-  },
-  {
-    functional: true,
-  },
-);
-
-export const fetchProductsByPartNumber$ = createEffect(
-  (actions$ = inject(Actions), productService = inject(ProductService)) => {
-    return actions$.pipe(
-      ofType(lab1ProductActions.fetchProductsByPartNumber),
-      switchMap(({partNumber}) => {
-        return productService.findByPartNumber(partNumber).pipe(
-          map((products) => lab1ProductActions.productsByPartNumberFetched({products})),
-          catchError((error: unknown) =>
-            of(
-              lab1ProductActions.productRequestFailed({
-                error: error as HttpErrorResponse,
-              }),
-            ),
-          ),
-        );
-      }),
-    );
-  },
-  {
-    functional: true,
-  },
-);
-
-export const fetchRatings$ = createEffect(
-  (actions$ = inject(Actions), productService = inject(ProductService)) => {
-    return actions$.pipe(
-      ofType(lab1ProductActions.fetchRatings),
+      ofType(lab1ProductActions.fetchAverageRating),
       switchMap(() => {
-        return productService.findRatings().pipe(
-          map((ratings) => lab1ProductActions.ratingsFetched({ratings})),
+        return productService.getAverageRating().pipe(
+          map((averageRating) =>
+            lab1ProductActions.averageRatingFetched({averageRating}),
+          ),
           catchError((error: unknown) =>
             of(
               lab1ProductActions.productRequestFailed({
@@ -398,13 +354,84 @@ export const fetchRatings$ = createEffect(
   },
 );
 
-export const decreasePrice$ = createEffect(
+export const fetchCountByRating$ = createEffect(
   (actions$ = inject(Actions), productService = inject(ProductService)) => {
     return actions$.pipe(
-      ofType(lab1ProductActions.decreasePrice),
-      switchMap(({manufacturerId, percent}) => {
-        return productService.decreasePrice(manufacturerId, percent).pipe(
-          map(() => lab1ProductActions.priceDecreased()),
+      ofType(lab1ProductActions.fetchCountByRating),
+      switchMap(({rating}) => {
+        return productService.countByRating(rating).pipe(
+          map((count) => lab1ProductActions.countByRatingFetched({count})),
+          catchError((error: unknown) =>
+            of(
+              lab1ProductActions.productRequestFailed({
+                error: error as HttpErrorResponse,
+              }),
+            ),
+          ),
+        );
+      }),
+    );
+  },
+  {
+    functional: true,
+  },
+);
+
+export const fetchDistinctOwners$ = createEffect(
+  (actions$ = inject(Actions), productService = inject(ProductService)) => {
+    return actions$.pipe(
+      ofType(lab1ProductActions.fetchDistinctOwners),
+      switchMap(() => {
+        return productService.getDistinctOwners().pipe(
+          map((owners) => lab1ProductActions.distinctOwnersFetched({owners})),
+          catchError((error: unknown) =>
+            of(
+              lab1ProductActions.productRequestFailed({
+                error: error as HttpErrorResponse,
+              }),
+            ),
+          ),
+        );
+      }),
+    );
+  },
+  {
+    functional: true,
+  },
+);
+
+export const fetchProductsByUnitOfMeasure$ = createEffect(
+  (actions$ = inject(Actions), productService = inject(ProductService)) => {
+    return actions$.pipe(
+      ofType(lab1ProductActions.fetchProductsByUnitOfMeasure),
+      switchMap(({unitOfMeasures}) => {
+        return productService.getProductsByUnitOfMeasure(unitOfMeasures).pipe(
+          map((products) =>
+            lab1ProductActions.productsByUnitOfMeasureFetched({products}),
+          ),
+          catchError((error: unknown) =>
+            of(
+              lab1ProductActions.productRequestFailed({
+                error: error as HttpErrorResponse,
+              }),
+            ),
+          ),
+        );
+      }),
+    );
+  },
+  {
+    functional: true,
+  },
+);
+
+export const decreaseAllPrices$ = createEffect(
+  (actions$ = inject(Actions), productService = inject(ProductService)) => {
+    return actions$.pipe(
+      ofType(lab1ProductActions.decreaseAllPrices),
+      switchMap(({percent}) => {
+        return productService.decreaseAllPrices(percent).pipe(
+          map(() => lab1ProductActions.allPricesDecreased()),
           catchError((error: unknown) =>
             of(
               lab1ProductActions.productRequestFailed({

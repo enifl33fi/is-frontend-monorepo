@@ -44,13 +44,15 @@
             {{ column }}
           </th>
         }
-        <th
-          *tuiHead="actionColumnName()"
-          tuiTh
-          [tuiSortable]="false"
-        >
-          {{ actionColumnName() }}
-        </th>
+        @if (!readOnly()) {
+          <th
+            *tuiHead="actionColumnName()"
+            tuiTh
+            [tuiSortable]="false"
+          >
+            {{ actionColumnName() }}
+          </th>
+        }
       </tr>
     </thead>
 
@@ -70,7 +72,7 @@
             </td>
           }
 
-          @if (entity.hasAccess) {
+          @if (entity.hasAccess && !readOnly()) {
             <td
               *tuiCell="actionColumnName()"
               tuiTd
@@ -101,27 +103,34 @@
       }
     </tbody>
 
-    <caption
-      tuiCaption
-      class="footer"
-    >
-      <button
-        appearance="flat"
-        iconStart="@tui.plus"
-        size="s"
-        tuiHint="Add"
-        tuiIconButton
-        (click)="handleAddClick.emit()"
+    @if (!readOnly() || usePagination()) {
+      <caption
+        tuiCaption
+        class="footer"
       >
-      </button>
-      <div>
-        <tui-table-pagination
-          [page]="page()"
-          [size]="size()"
-          [total]="total()"
-          (paginationChange)="onPaginationChange($event)"
-        ></tui-table-pagination>
-      </div>
-    </caption>
+        @if (!readOnly()) {
+          <button
+            appearance="flat"
+            iconStart="@tui.plus"
+            size="s"
+            tuiHint="Add"
+            tuiIconButton
+            (click)="handleAddClick.emit()"
+          >
+          </button>
+        }
+
+        @if (usePagination()) {
+          <div>
+            <tui-table-pagination
+              [page]="page()"
+              [size]="size()"
+              [total]="total()"
+              (paginationChange)="onPaginationChange($event)"
+            ></tui-table-pagination>
+          </div>
+        }
+      </caption>
+    }
   </table>
 </div>

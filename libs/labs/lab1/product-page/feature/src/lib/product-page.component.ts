@@ -1,21 +1,33 @@
 import {AsyncPipe} from '@angular/common';
-import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+  Signal,
+  signal,
+} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {
   lab1ProductActions,
-  selectCountOwnerLessThan,
-  selectProductsByPartNumber,
-  selectRatings,
+  selectAverageRating,
+  selectCountByRating,
+  selectDistinctOwners,
+  selectProductsByUnitOfMeasure,
 } from '@is/labs/lab1/shared/product/store';
+import {UnitOfMeasure, UNITS_OF_MEASURES} from '@is/labs/lab1/shared/product/types';
 import {lab1RootActions} from '@is/labs/lab1/shared/root/store';
-import {notBlankValidator} from '@is/shared/utils';
+import {TableEntity} from '@is/labs/lab1/shared/types';
+import {EntityTableComponent} from '@is/labs/lab1/shared/ui';
 import {Store} from '@ngrx/store';
-import {TuiButton, TuiError} from '@taiga-ui/core';
-import {TuiButtonLoading, TuiFieldErrorPipe} from '@taiga-ui/kit';
+import {TUI_DEFAULT_MATCHER, tuiPure} from '@taiga-ui/cdk';
+import {TuiButton, TuiError, TuiTextfield} from '@taiga-ui/core';
+import {TuiFieldErrorPipe} from '@taiga-ui/kit';
 import {
   TuiComboBoxModule,
   TuiInputModule,
   TuiInputNumberModule,
+  TuiMultiSelectModule,
   TuiTextfieldControllerModule,
 } from '@taiga-ui/legacy';
 
@@ -26,15 +38,17 @@ import {ProductTableComponent} from './product-table/product-table.component';
   selector: 'lab1-product-page',
   imports: [
     AsyncPipe,
+    EntityTableComponent,
     ProductTableComponent,
     ReactiveFormsModule,
     TuiButton,
-    TuiButtonLoading,
     TuiComboBoxModule,
     TuiError,
     TuiFieldErrorPipe,
     TuiInputModule,
     TuiInputNumberModule,
+    TuiMultiSelectModule,
+    TuiTextfield,
     TuiTextfieldControllerModule,
   ],
   templateUrl: './product-page.component.html',
@@ -44,62 +58,86 @@ import {ProductTableComponent} from './product-table/product-table.component';
 export class ProductPageComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly store = inject(Store);
+  protected search = signal<string | null>(null);
+  protected readonly UNITS_OF_MEASURES = UNITS_OF_MEASURES;
 
-  protected readonly JSON = JSON;
+  protected readonly obj = Object;
 
-  public readonly formCount = this.fb.group({
-    ownerId: this.fb.control<number | null>(null, [Validators.required]),
+  public readonly formCountByRating = this.fb.group({
+    rating: this.fb.control<number | null>(null, [
+      Validators.required,
+      Validators.min(0),
+    ]),
   });
 
-  public readonly formPartNumber = this.fb.group({
-    partNumber: this.fb.control<string>('', [notBlankValidator()]),
+  public readonly formProductsByUnit = this.fb.group({
+    unitOfMeasures: this.fb.control<UnitOfMeasure[]>([], [Validators.required]),
   });
 
-  public readonly formDecreasePrice = this.fb.group({
-    manufacturerId: this.fb.control<number | null>(null, [Validators.required]),
-    percent: this.fb.control<number | null>(null, [Validators.required]),
+  public readonly formDecreaseAllPrices = this.fb.group({
+    percent: this.fb.control<number | null>(null, [
+      Validators.required,
+      Validators.min(0),
+      Validators.max(100),
+    ]),
   });
 
-  public readonly ratingsSignal = this.store.selectSignal(selectRatings);
-  public readonly productsSignal = this.store.selectSignal(selectProductsByPartNumber);
-  public readonly ownerLessThanSignal = this.store.selectSignal(selectCountOwnerLessThan);
+  public readonly averageRatingSignal = this.store.selectSignal(selectAverageRating);
+  public readonly countByRatingSignal = this.store.selectSignal(selectCountByRating);
+  public readonly distinctOwnersSignal = this.store.selectSignal(
+    selectDistinctOwners,
+  ) as unknown as Signal<TableEntity[]>;
+
+  public readonly productsByUnitOfMeasureSignal = this.store.selectSignal(
+    selectProductsByUnitOfMeasure,
+  ) as unknown as Signal<TableEntity[]>;
 
   public ngOnInit() {
     this.store.dispatch(lab1RootActions.setActiveTab({activeTab: 'product'}));
   }
 
-  public onSubmitCountForm() {
-    if (this.formCount.valid) {
+  public onShowAvgRatingClick() {
+    this.store.dispatch(lab1ProductActions.fetchAverageRating());
+  }
+
+  public onSubmitCountByRatingForm() {
+    if (this.formCountByRating.valid) {
       this.store.dispatch(
-        lab1ProductActions.fetchOwnerCountLessThan({
-          ownerId: this.formCount.value.ownerId ?? 0,
+        lab1ProductActions.fetchCountByRating({
+          rating: this.formCountByRating.value.rating ?? 0,
         }),
       );
     }
   }
 
-  public onSubmitPartNumberForm() {
-    if (this.formPartNumber.valid) {
+  public onSubmitProductsByUnitForm() {
+    if (this.formProductsByUnit.valid) {
       this.store.dispatch(
-        lab1ProductActions.fetchProductsByPartNumber({
-          partNumber: this.formPartNumber.value.partNumber ?? '',
+        lab1ProductActions.fetchProductsByUnitOfMeasure({
+          unitOfMeasures: this.formProductsByUnit.value.unitOfMeasures ?? [],
         }),
       );
     }
   }
 
-  public onFindRatingsClick() {
-    this.store.dispatch(lab1ProductActions.fetchRatings());
+  public onFetchDistinctOwnersClick() {
+    this.store.dispatch(lab1ProductActions.fetchDistinctOwners());
   }
 
-  public onSubmitDecreasePriceForm() {
-    if (this.formDecreasePrice.valid) {
+  public onSubmitDecreaseAllPricesForm() {
+    if (this.formDecreaseAllPrices.valid) {
       this.store.dispatch(
-        lab1ProductActions.decreasePrice({
-          manufacturerId: this.formDecreasePrice.value.manufacturerId ?? 0,
-          percent: this.formDecreasePrice.value.percent ?? 0,
+        lab1ProductActions.decreaseAllPrices({
+          percent: this.formDecreaseAllPrices.value.percent ?? 0,
         }),
       );
     }
+  }
+
+  @tuiPure
+  protected filter(search?: string | null): readonly string[] {
+    return this.UNITS_OF_MEASURES.filter((unitOfMeasure) =>
+      TUI_DEFAULT_MATCHER(unitOfMeasure, search ?? ''),
+    );
   }
 }

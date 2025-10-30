@@ -1,152 +1,190 @@
 <lab1-product-table class="main-table"></lab1-product-table>
 
-<form
-  class="tui-form"
-  [formGroup]="formCount"
-  (ngSubmit)="onSubmitCountForm()"
->
-  <div class="tui-form__header">Find count where owner less than</div>
+<div class="prompt">
+  <div class="tui-form">
+    <div class="tui-form__header">Find average rating</div>
 
-  <div class="tui-form__row">
-    <tui-input-number
-      formControlName="ownerId"
-      [tuiTextfieldCleaner]="true"
-    >
-      ownerId
-      <input tuiTextfieldLegacy />
-    </tui-input-number>
-
-    <tui-error
-      formControlName="ownerId"
-      [error]="[] | tuiFieldError | async"
-    ></tui-error>
-  </div>
-
-  <div class="tui-form__buttons">
-    <button
-      appearance="primary"
-      size="m"
-      tuiButton
-      class="tui-form__button"
-    >
-      Find
-    </button>
-  </div>
-</form>
-
-<div class="tui-form__row">
-  @if (ownerLessThanSignal() !== null) {
-    {{ ownerLessThanSignal() }}
-  }
-</div>
-
-<form
-  class="tui-form"
-  [formGroup]="formPartNumber"
-  (ngSubmit)="onSubmitPartNumberForm()"
->
-  <div class="tui-form__header">Find products by partNumber</div>
-
-  <div class="tui-form__row">
-    <tui-input
-      formControlName="partNumber"
-      class="tui-form__row"
-      [tuiTextfieldCleaner]="true"
-    >
-      partNumber
-      <input tuiTextfieldLegacy />
-    </tui-input>
-    <tui-error
-      formControlName="partNumber"
-      [error]="[] | tuiFieldError | async"
-    ></tui-error>
-  </div>
-
-  <div class="tui-form__buttons">
-    <button
-      appearance="primary"
-      size="m"
-      tuiButton
-      class="tui-form__button"
-    >
-      Find
-    </button>
-  </div>
-</form>
-
-<div class="tui-form__row">
-  @if (productsSignal()) {
-    {{ JSON.stringify(productsSignal()) }}
-  }
-</div>
-
-<div class="tui-form">
-  <div class="tui-form__header">Find distinct ratings</div>
-
-  <div class="tui-form__buttons">
-    <button
-      appearance="primary"
-      size="m"
-      tuiButton
-      class="tui-form__button"
-      (click)="onFindRatingsClick()"
-    >
-      Find
-    </button>
-  </div>
-</div>
-
-<div class="tui-form__row">
-  @if (ratingsSignal()) {
-    {{ JSON.stringify(ratingsSignal()) }}
-  }
-</div>
-
-<form
-  class="tui-form"
-  [formGroup]="formDecreasePrice"
-  (ngSubmit)="onSubmitDecreasePriceForm()"
->
-  <div class="tui-form__header">Decrease price</div>
-
-  <div class="tui-form__row">
-    <tui-input-number
-      formControlName="manufacturerId"
-      [tuiTextfieldCleaner]="true"
-    >
-      manufacturerId
-      <input tuiTextfieldLegacy />
-    </tui-input-number>
-
-    <tui-error
-      formControlName="manufacturerId"
-      [error]="[] | tuiFieldError | async"
-    ></tui-error>
+    <div class="tui-form__buttons">
+      <button
+        appearance="primary"
+        size="m"
+        tuiButton
+        class="tui-form__button"
+        (click)="onShowAvgRatingClick()"
+      >
+        Find
+      </button>
+    </div>
   </div>
 
   <div class="tui-form__row">
-    <tui-input-number
-      formControlName="percent"
-      [tuiTextfieldCleaner]="true"
-    >
-      percent
-      <input tuiTextfieldLegacy />
-    </tui-input-number>
+    @if (averageRatingSignal() !== null) {
+      Average Rating: {{ averageRatingSignal() }}
+    }
+  </div>
+</div>
 
-    <tui-error
-      formControlName="percent"
-      [error]="[] | tuiFieldError | async"
-    ></tui-error>
+<div class="prompt">
+  <form
+    class="tui-form"
+    [formGroup]="formCountByRating"
+    (ngSubmit)="onSubmitCountByRatingForm()"
+  >
+    <div class="tui-form__header">Find count by rating</div>
+
+    <div class="tui-form__row">
+      <tui-input-number
+        formControlName="rating"
+        [tuiTextfieldCleaner]="true"
+      >
+        Rating
+        <input tuiTextfieldLegacy />
+      </tui-input-number>
+
+      <tui-error
+        formControlName="rating"
+        [error]="[] | tuiFieldError | async"
+      ></tui-error>
+    </div>
+
+    <div class="tui-form__buttons">
+      <button
+        appearance="primary"
+        size="m"
+        tuiButton
+        class="tui-form__button"
+        [disabled]="formCountByRating.invalid"
+      >
+        Find
+      </button>
+    </div>
+  </form>
+
+  <div class="tui-form__row">
+    @if (countByRatingSignal() !== null) {
+      Count: {{ countByRatingSignal() }}
+    }
+  </div>
+</div>
+
+<div class="prompt">
+  <form
+    class="tui-form"
+    [formGroup]="formProductsByUnit"
+    (ngSubmit)="onSubmitProductsByUnitForm()"
+  >
+    <div class="tui-form__header">Find products by unit of measure</div>
+
+    <div class="tui-form__row">
+      <tui-multi-select
+        formControlName="unitOfMeasures"
+        placeholder="Select unit of measures"
+        [tuiTextfieldLabelOutside]="true"
+        [(search)]="search"
+      >
+        <tui-data-list-wrapper
+          *tuiDataList
+          tuiMultiSelectGroup
+          [items]="filter(search())"
+        />
+      </tui-multi-select>
+
+      <tui-error
+        formControlName="unitOfMeasures"
+        [error]="[] | tuiFieldError | async"
+      ></tui-error>
+    </div>
+
+    <div class="tui-form__buttons">
+      <button
+        appearance="primary"
+        size="m"
+        tuiButton
+        type="submit"
+        class="tui-form__button"
+        [disabled]="formProductsByUnit.invalid"
+      >
+        Find
+      </button>
+    </div>
+  </form>
+
+  <div class="tui-form__row">
+    @let productsByUnitOfMeasure = productsByUnitOfMeasureSignal();
+    @if (productsByUnitOfMeasure && productsByUnitOfMeasure.length) {
+      <lab1-entity-table
+        [columns]="obj.keys(productsByUnitOfMeasure[0])"
+        [entities]="productsByUnitOfMeasure"
+        [readOnly]="true"
+        [usePagination]="false"
+      ></lab1-entity-table>
+    }
+  </div>
+</div>
+
+<div class="prompt">
+  <div class="tui-form">
+    <div class="tui-form__header">Find distinct owners</div>
+
+    <div class="tui-form__buttons">
+      <button
+        appearance="primary"
+        size="m"
+        tuiButton
+        class="tui-form__button"
+        (click)="onFetchDistinctOwnersClick()"
+      >
+        Find
+      </button>
+    </div>
   </div>
 
-  <div class="tui-form__buttons">
-    <button
-      appearance="primary"
-      size="m"
-      tuiButton
-      class="tui-form__button"
-    >
-      Do
-    </button>
+  <div class="tui-form__row">
+    @let distinctOwners = distinctOwnersSignal();
+    @if (distinctOwners && distinctOwners.length) {
+      <lab1-entity-table
+        [columns]="obj.keys(distinctOwners[0])"
+        [entities]="distinctOwners"
+        [readOnly]="true"
+        [usePagination]="false"
+      ></lab1-entity-table>
+    }
   </div>
-</form>
+</div>
+
+<div class="prompt">
+  <form
+    class="tui-form"
+    [formGroup]="formDecreaseAllPrices"
+    (ngSubmit)="onSubmitDecreaseAllPricesForm()"
+  >
+    <div class="tui-form__header">Decrease all prices</div>
+
+    <div class="tui-form__row">
+      <tui-input-number
+        formControlName="percent"
+        [tuiTextfieldCleaner]="true"
+      >
+        Percent
+        <input tuiTextfieldLegacy />
+      </tui-input-number>
+
+      <tui-error
+        formControlName="percent"
+        [error]="[] | tuiFieldError | async"
+      ></tui-error>
+    </div>
+
+    <div class="tui-form__buttons">
+      <button
+        appearance="primary"
+        size="m"
+        tuiButton
+        class="tui-form__button"
+        [disabled]="formDecreaseAllPrices.invalid"
+      >
+        Apply
+      </button>
+    </div>
+  </form>
+</div>

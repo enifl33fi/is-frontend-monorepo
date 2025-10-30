@@ -7,9 +7,10 @@ export const initialProductState: ProductState = {
   products: [],
   selectedProduct: null,
   dialogLoading: false,
-  countOwnerLessThan: null,
-  productsByPartNumber: [],
-  ratings: [],
+  averageRating: null,
+  countByRating: null,
+  distinctOwners: [],
+  productsByUnitOfMeasure: [],
   queryParams: {},
   totalPages: 0,
   totalElements: 0,
@@ -24,12 +25,12 @@ export const productStore = createFeature({
       (state, {response}): ProductState => ({
         ...state,
         products: response.content,
-        totalElements: response.totalElements,
-        totalPages: response.totalPages,
+        totalElements: response.page.totalElements,
+        totalPages: response.page.totalPages,
         queryParams: {
           ...state.queryParams,
-          page: response.number,
-          size: response.size,
+          page: response.page.number,
+          size: response.page.size,
         },
       }),
     ),
@@ -86,24 +87,31 @@ export const productStore = createFeature({
       }),
     ),
     on(
-      lab1ProductActions.ownerCountLessThanFetched,
-      (state, {ownerCount}): ProductState => ({
+      lab1ProductActions.averageRatingFetched,
+      (state, {averageRating}): ProductState => ({
         ...state,
-        countOwnerLessThan: ownerCount,
+        averageRating,
       }),
     ),
     on(
-      lab1ProductActions.productsByPartNumberFetched,
+      lab1ProductActions.countByRatingFetched,
+      (state, {count}): ProductState => ({
+        ...state,
+        countByRating: count,
+      }),
+    ),
+    on(
+      lab1ProductActions.distinctOwnersFetched,
+      (state, {owners}): ProductState => ({
+        ...state,
+        distinctOwners: owners,
+      }),
+    ),
+    on(
+      lab1ProductActions.productsByUnitOfMeasureFetched,
       (state, {products}): ProductState => ({
         ...state,
-        productsByPartNumber: products,
-      }),
-    ),
-    on(
-      lab1ProductActions.ratingsFetched,
-      (state, {ratings}): ProductState => ({
-        ...state,
-        ratings,
+        productsByUnitOfMeasure: products,
       }),
     ),
   ),

@@ -15,6 +15,5 @@ export function convertOrganizationToOrganizationTable(
     employeesCount: organization.employeesCount,
     type: organization.type,
     rating: organization.rating,
-    creationDate: organization.creationDate,
   };
 }

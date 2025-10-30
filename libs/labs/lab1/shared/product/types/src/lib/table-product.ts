@@ -12,5 +12,5 @@ export interface TableProduct extends Entity, ProductData {}
 
 export interface FormProduct
   extends FormEntity,
-    ProductData,
+    Omit<ProductData, 'creationDate'>,
     Partial<Omit<Entity, 'hasAccess'>> {}

@@ -68,6 +68,8 @@ export class EntityTableComponent implements OnInit {
   public readonly filterColumns = input<string[]>([]);
   public readonly columns = input<string[]>([]);
   public readonly actionColumnName = input('actions');
+  public readonly readOnly = input<boolean>(false);
+  public readonly usePagination = input<boolean>(true);
 
   public readonly initialized = signal(false);
 
@@ -95,8 +97,9 @@ export class EntityTableComponent implements OnInit {
   public readonly actualColumns = computed(() => {
     const columns = this.columns();
     const actionColumnName = this.actionColumnName();
+    const readOnly = this.readOnly();
 
-    if (columns.length) {
+    if (columns.length && !readOnly) {
       columns.push(actionColumnName);
     }
 

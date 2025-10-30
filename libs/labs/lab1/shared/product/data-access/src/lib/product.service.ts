@@ -1,7 +1,14 @@
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {inject, Injectable, OnDestroy} from '@angular/core';
+import {convertPersonToTablePerson} from '@is/labs/lab1/shared/person/data-access';
+import {Person, TablePerson} from '@is/labs/lab1/shared/person/types';
 import {lab1ProductActions} from '@is/labs/lab1/shared/product/store';
-import {FormProduct, Product, TableProduct} from '@is/labs/lab1/shared/product/types';
+import {
+  FormProduct,
+  Product,
+  TableProduct,
+  UnitOfMeasure,
+} from '@is/labs/lab1/shared/product/types';
 import {EntityQueryParams, PageResponse} from '@is/labs/lab1/shared/types';
 import {formHttpParamsFn, WS_URL_TOKEN} from '@is/labs/lab1/shared/utils';
 import {BACK_URL_TOKEN} from '@is/shared/utils';
@@ -75,27 +82,45 @@ export class ProductService implements OnDestroy {
     return this.http.delete<void>(`${this.backUrlSubject$.getValue()}/product/${id}`);
   }
 
-  public countOwnerLessThan(ownerId: number): Observable<number> {
+  public getAverageRating(): Observable<number> {
     return this.http.get<number>(
-      `${this.backUrlSubject$.getValue()}/product/count_owner_less_than/${ownerId}`,
+      `${this.backUrlSubject$.getValue()}/product/average-rating`,
     );
   }
 
-  public findByPartNumber(partNumber: string): Observable<TableProduct[]> {
+  public countByRating(rating: number): Observable<number> {
+    return this.http.get<number>(
+      `${this.backUrlSubject$.getValue()}/product/count-by-rating/${rating}`,
+    );
+  }
+
+  public getDistinctOwners(): Observable<TablePerson[]> {
+    return this.http
+      .get<Person[]>(`${this.backUrlSubject$.getValue()}/product/distinct-owners`)
+      .pipe(
+        map((persons) => persons.map((person) => convertPersonToTablePerson(person))),
+      );
+  }
+
+  public getProductsByUnitOfMeasure(
+    unitOfMeasures: UnitOfMeasure[],
+  ): Observable<TableProduct[]> {
+    let params = new HttpParams();
+
+    unitOfMeasures.forEach((unit) => {
+      params = params.append('unitOfMeasures', unit);
+    });
+
     return this.http
       .get<
         Product[]
-      >(`${this.backUrlSubject$.getValue()}/product/find_by_part_number?partNumber=${partNumber}`)
+      >(`${this.backUrlSubject$.getValue()}/product/by-unit-of-measure`, {params})
       .pipe(map((products) => products.map(convertProductToTableProduct)));
   }
 
-  public findRatings(): Observable<number[]> {
-    return this.http.get<number[]>(`${this.backUrlSubject$.getValue()}/product/ratings`);
-  }
-
-  public decreasePrice(manufactureId: number, percent: number): Observable<void> {
+  public decreaseAllPrices(percent: number): Observable<void> {
     return this.http.patch<void>(
-      `${this.backUrlSubject$.getValue()}/product/decrease-price/${manufactureId}`,
+      `${this.backUrlSubject$.getValue()}/product/decrease-all-prices`,
       percent,
     );
   }

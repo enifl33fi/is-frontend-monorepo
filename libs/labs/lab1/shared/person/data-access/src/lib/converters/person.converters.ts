@@ -10,6 +10,5 @@ export function convertPersonToTablePerson(person: Person): TablePerson {
     hairColor: person.hairColor,
     weight: person.weight,
     nationality: person.nationality,
-    creationDate: person.creationDate,
   };
 }

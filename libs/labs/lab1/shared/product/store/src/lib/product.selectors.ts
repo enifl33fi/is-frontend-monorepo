@@ -6,9 +6,10 @@ export const {
   selectProducts,
   selectDialogLoading,
   selectSelectedProduct,
-  selectRatings,
-  selectProductsByPartNumber,
-  selectCountOwnerLessThan,
+  selectAverageRating,
+  selectCountByRating,
+  selectDistinctOwners,
+  selectProductsByUnitOfMeasure,
   selectQueryParams,
   selectTotalElements,
 } = productStore;

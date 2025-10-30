@@ -1,7 +1,14 @@
+@import (reference) '@taiga-ui/core/styles/taiga-ui-local.less';
+
 :host {
   display: block;
 }
 
 .main-table {
   margin-bottom: 1.5rem;
+}
+
+.prompt:not(:last-child) {
+  border-bottom: 2px solid var(--tui-text-tertiary);
+  margin-bottom: 2rem;
 }

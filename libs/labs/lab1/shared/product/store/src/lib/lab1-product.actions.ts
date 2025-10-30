@@ -1,8 +1,10 @@
 import type {HttpErrorResponse} from '@angular/common/http';
+import type {TablePerson} from '@is/labs/lab1/shared/person/types';
 import type {
   FormProduct,
   Product,
   TableProduct,
+  UnitOfMeasure,
 } from '@is/labs/lab1/shared/product/types';
 import type {EntityQueryParams, PageResponse} from '@is/labs/lab1/shared/types';
 import {createActionGroup, emptyProps, props} from '@ngrx/store';
@@ -26,14 +28,20 @@ export const lab1ProductActions = createActionGroup({
     deleteProductCompleted: emptyProps(),
     showViewDialog: props<{id: number}>(),
     showAddDialog: emptyProps(),
-    fetchOwnerCountLessThan: props<{ownerId: number}>(),
-    fetchProductsByPartNumber: props<{partNumber: string}>(),
-    fetchRatings: emptyProps(),
-    decreasePrice: props<{manufacturerId: number; percent: number}>(),
-    ownerCountLessThanFetched: props<{ownerCount: number}>(),
-    productsByPartNumberFetched: props<{products: TableProduct[]}>(),
-    ratingsFetched: props<{ratings: number[]}>(),
-    priceDecreased: emptyProps(),
+    fetchAverageRating: emptyProps(),
+    averageRatingFetched: props<{averageRating: number}>(),
+
+    fetchCountByRating: props<{rating: number}>(),
+    countByRatingFetched: props<{count: number}>(),
+
+    fetchDistinctOwners: emptyProps(),
+    distinctOwnersFetched: props<{owners: TablePerson[]}>(),
+
+    fetchProductsByUnitOfMeasure: props<{unitOfMeasures: UnitOfMeasure[]}>(),
+    productsByUnitOfMeasureFetched: props<{products: TableProduct[]}>(),
+
+    decreaseAllPrices: props<{percent: number}>(),
+    allPricesDecreased: emptyProps(),
 
     queryParamsFetched: props<{queryParams: EntityQueryParams}>(),
     queryParamsUpdated: props<{queryParams: EntityQueryParams}>(),

@@ -22,12 +22,12 @@ export const addressStore = createFeature({
       (state, {response}): AddressState => ({
         ...state,
         addresses: response.content,
-        totalElements: response.totalElements,
-        totalPages: response.totalPages,
+        totalElements: response.page.totalElements,
+        totalPages: response.page.totalPages,
         queryParams: {
           ...state.queryParams,
-          page: response.number,
-          size: response.size,
+          page: response.page.number,
+          size: response.page.size,
         },
       }),
     ),

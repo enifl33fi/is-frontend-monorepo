@@ -11,6 +11,7 @@ export interface ProductBase {
   price: number;
   manufactureCost: number;
   rating: number;
+  creationDate: string;
 }
 
 export interface Product extends Entity, ProductBase {
